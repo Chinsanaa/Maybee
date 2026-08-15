@@ -211,7 +211,7 @@ export default async function HomePage() {
         </section>
 
         {/* Store section */}
-        <section className="mt-14 grid gap-6 rounded-card bg-brand-ink p-8 text-white md:grid-cols-2">
+        <section className="mt-14 grid gap-6 rounded-card bg-brand-charcoal p-8 text-white md:grid-cols-2">
           <div>
             <h2 className="font-display text-2xl font-bold">{t("storeTitle")}</h2>
             <ul className="mt-4 space-y-3 text-sm text-white/90">
