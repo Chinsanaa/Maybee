@@ -63,36 +63,6 @@ export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
   }
 });
 
-export type DeliverySettings = Tables<"delivery_settings">;
-
-const DELIVERY_FALLBACK: DeliverySettings = {
-  id: 1,
-  zones: [],
-  base_fee: 0,
-  free_threshold: null,
-  estimated_time_mn: "",
-  estimated_time_en: "",
-  same_day_enabled: false,
-  pickup_enabled: true,
-  delivery_enabled: false,
-  payment_methods: [],
-  updated_at: new Date().toISOString(),
-};
-
-export const getDeliverySettings = cache(async (): Promise<DeliverySettings> => {
-  try {
-    const supabase = createPublicClient();
-    const { data } = await supabase
-      .from("delivery_settings")
-      .select("*")
-      .eq("id", 1)
-      .maybeSingle();
-    return data ? { ...DELIVERY_FALLBACK, ...data } : DELIVERY_FALLBACK;
-  } catch {
-    return DELIVERY_FALLBACK;
-  }
-});
-
 const DAY_ORDER: (keyof BusinessHours)[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 export function formatHoursSummary(hours: BusinessHours, locale: string): string {

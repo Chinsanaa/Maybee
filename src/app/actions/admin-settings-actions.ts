@@ -34,22 +34,3 @@ export async function updateBusinessInfoAction(formData: FormData) {
   revalidatePath("/", "layout");
   revalidatePath("/admin/settings");
 }
-
-export async function updateDeliverySettingsAction(formData: FormData) {
-  const supabase = await createServerSupabaseClient();
-  await supabase
-    .from("delivery_settings")
-    .update({
-      base_fee: Number(formData.get("base_fee") ?? 0),
-      free_threshold: formData.get("free_threshold") ? Number(formData.get("free_threshold")) : null,
-      pickup_enabled: formData.get("pickup_enabled") === "on",
-      delivery_enabled: formData.get("delivery_enabled") === "on",
-      same_day_enabled: formData.get("same_day_enabled") === "on",
-      estimated_time_mn: String(formData.get("estimated_time_mn") ?? ""),
-      estimated_time_en: String(formData.get("estimated_time_en") ?? ""),
-    })
-    .eq("id", 1);
-
-  revalidatePath("/", "layout");
-  revalidatePath("/admin/settings");
-}

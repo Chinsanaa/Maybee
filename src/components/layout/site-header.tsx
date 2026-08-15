@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "./logo";
 import { SearchBar } from "./search-bar";
-import { CartLink } from "./cart-link";
 import { LanguageSwitcher } from "./language-switcher";
 import { MobileMenu } from "./mobile-menu";
 import type { BusinessInfo } from "@/lib/business-info";
@@ -52,7 +51,6 @@ export async function SiteHeader({ business }: { business: BusinessInfo }) {
             {business.phone}
           </a>
           <LanguageSwitcher />
-          <CartLink />
           <MobileMenu />
         </div>
       </div>

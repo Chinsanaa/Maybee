@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
-import { updateBusinessInfoAction, updateDeliverySettingsAction } from "@/app/actions/admin-settings-actions";
+import { updateBusinessInfoAction } from "@/app/actions/admin-settings-actions";
 
 const DAYS = [
   ["mon", "Monday"], ["tue", "Tuesday"], ["wed", "Wednesday"], ["thu", "Thursday"],
@@ -10,10 +10,7 @@ const inputCls = "mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-
 
 export default async function AdminSettingsPage() {
   const supabase = await createServerSupabaseClient();
-  const [{ data: business }, { data: delivery }] = await Promise.all([
-    supabase.from("business_info").select("*").eq("id", 1).maybeSingle(),
-    supabase.from("delivery_settings").select("*").eq("id", 1).maybeSingle(),
-  ]);
+  const { data: business } = await supabase.from("business_info").select("*").eq("id", 1).maybeSingle();
 
   const hours = (business?.hours as Record<string, { open: string; close: string } | null>) ?? {};
 
@@ -105,49 +102,6 @@ export default async function AdminSettingsPage() {
 
           <button type="submit" className="rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark">
             Save business info
-          </button>
-        </form>
-      </section>
-
-      <section className="rounded-card border border-brand-gray-light bg-white p-6">
-        <h2 className="font-semibold text-brand-ink">Delivery Settings</h2>
-        <form action={updateDeliverySettingsAction} className="mt-4 space-y-4">
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="pickup_enabled" defaultChecked={delivery?.pickup_enabled} />
-              Store pickup enabled
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="delivery_enabled" defaultChecked={delivery?.delivery_enabled} />
-              Delivery enabled
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input type="checkbox" name="same_day_enabled" defaultChecked={delivery?.same_day_enabled} />
-              Same-day delivery
-            </label>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm">
-              Base delivery fee (₮)
-              <input type="number" name="base_fee" defaultValue={delivery?.base_fee ?? 0} className={inputCls} />
-            </label>
-            <label className="block text-sm">
-              Free delivery threshold (₮)
-              <input type="number" name="free_threshold" defaultValue={delivery?.free_threshold ?? ""} className={inputCls} />
-            </label>
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block text-sm">
-              Estimated time (MN)
-              <input name="estimated_time_mn" defaultValue={delivery?.estimated_time_mn} className={inputCls} />
-            </label>
-            <label className="block text-sm">
-              Estimated time (EN)
-              <input name="estimated_time_en" defaultValue={delivery?.estimated_time_en} className={inputCls} />
-            </label>
-          </div>
-          <button type="submit" className="rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark">
-            Save delivery settings
           </button>
         </form>
       </section>

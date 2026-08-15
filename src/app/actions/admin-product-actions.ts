@@ -58,7 +58,6 @@ function buildProductPayload(formData: FormData): TablesInsert<"product"> {
       .map((t) => t.trim())
       .filter(Boolean),
     available_for_pickup: bool(formData, "available_for_pickup"),
-    available_for_delivery: bool(formData, "available_for_delivery"),
     is_featured: bool(formData, "is_featured"),
     is_new_arrival: bool(formData, "is_new_arrival"),
     is_best_seller: bool(formData, "is_best_seller"),

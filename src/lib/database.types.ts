@@ -111,63 +111,6 @@ export type Database = {
         }
         Relationships: []
       }
-      cart: {
-        Row: {
-          created_at: string
-          id: string
-          token: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          token: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          token?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      cart_item: {
-        Row: {
-          cart_id: string
-          id: string
-          product_id: string
-          quantity: number
-        }
-        Insert: {
-          cart_id: string
-          id?: string
-          product_id: string
-          quantity?: number
-        }
-        Update: {
-          cart_id?: string
-          id?: string
-          product_id?: string
-          quantity?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "cart_item_cart_id_fkey"
-            columns: ["cart_id"]
-            isOneToOne: false
-            referencedRelation: "cart"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "cart_item_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "product"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       category: {
         Row: {
           created_at: string
@@ -263,208 +206,10 @@ export type Database = {
         }
         Relationships: []
       }
-      delivery_settings: {
-        Row: {
-          base_fee: number
-          delivery_enabled: boolean
-          estimated_time_en: string
-          estimated_time_mn: string
-          free_threshold: number | null
-          id: number
-          payment_methods: Json
-          pickup_enabled: boolean
-          same_day_enabled: boolean
-          updated_at: string
-          zones: Json
-        }
-        Insert: {
-          base_fee?: number
-          delivery_enabled?: boolean
-          estimated_time_en?: string
-          estimated_time_mn?: string
-          free_threshold?: number | null
-          id?: number
-          payment_methods?: Json
-          pickup_enabled?: boolean
-          same_day_enabled?: boolean
-          updated_at?: string
-          zones?: Json
-        }
-        Update: {
-          base_fee?: number
-          delivery_enabled?: boolean
-          estimated_time_en?: string
-          estimated_time_mn?: string
-          free_threshold?: number | null
-          id?: number
-          payment_methods?: Json
-          pickup_enabled?: boolean
-          same_day_enabled?: boolean
-          updated_at?: string
-          zones?: Json
-        }
-        Relationships: []
-      }
-      order: {
-        Row: {
-          address: string | null
-          address_details: string | null
-          created_at: string
-          customer_email: string | null
-          customer_name: string
-          customer_notes: string | null
-          customer_phone: string
-          delivery_fee: number
-          delivery_method: Database["public"]["Enums"]["delivery_method"]
-          discount: number
-          district: string | null
-          id: string
-          internal_notes: string | null
-          khoroo: string | null
-          order_number: string
-          payment_method: string
-          payment_ref: string | null
-          status: Database["public"]["Enums"]["order_status"]
-          subtotal: number
-          total: number
-          updated_at: string
-        }
-        Insert: {
-          address?: string | null
-          address_details?: string | null
-          created_at?: string
-          customer_email?: string | null
-          customer_name: string
-          customer_notes?: string | null
-          customer_phone: string
-          delivery_fee?: number
-          delivery_method: Database["public"]["Enums"]["delivery_method"]
-          discount?: number
-          district?: string | null
-          id?: string
-          internal_notes?: string | null
-          khoroo?: string | null
-          order_number: string
-          payment_method: string
-          payment_ref?: string | null
-          status?: Database["public"]["Enums"]["order_status"]
-          subtotal: number
-          total: number
-          updated_at?: string
-        }
-        Update: {
-          address?: string | null
-          address_details?: string | null
-          created_at?: string
-          customer_email?: string | null
-          customer_name?: string
-          customer_notes?: string | null
-          customer_phone?: string
-          delivery_fee?: number
-          delivery_method?: Database["public"]["Enums"]["delivery_method"]
-          discount?: number
-          district?: string | null
-          id?: string
-          internal_notes?: string | null
-          khoroo?: string | null
-          order_number?: string
-          payment_method?: string
-          payment_ref?: string | null
-          status?: Database["public"]["Enums"]["order_status"]
-          subtotal?: number
-          total?: number
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      order_item: {
-        Row: {
-          id: string
-          line_total: number
-          order_id: string
-          product_id: string | null
-          product_name_en: string
-          product_name_mn: string
-          quantity: number
-          sku: string
-          unit_price: number
-        }
-        Insert: {
-          id?: string
-          line_total: number
-          order_id: string
-          product_id?: string | null
-          product_name_en?: string
-          product_name_mn: string
-          quantity: number
-          sku: string
-          unit_price: number
-        }
-        Update: {
-          id?: string
-          line_total?: number
-          order_id?: string
-          product_id?: string | null
-          product_name_en?: string
-          product_name_mn?: string
-          quantity?: number
-          sku?: string
-          unit_price?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_item_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "order"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "order_item_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "product"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      order_status_history: {
-        Row: {
-          created_at: string
-          id: string
-          note: string | null
-          order_id: string
-          status: Database["public"]["Enums"]["order_status"]
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          note?: string | null
-          order_id: string
-          status: Database["public"]["Enums"]["order_status"]
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          note?: string | null
-          order_id?: string
-          status?: Database["public"]["Enums"]["order_status"]
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_status_history_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "order"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       product: {
         Row: {
           age_max_months: number | null
           age_min_months: number | null
-          available_for_delivery: boolean
           available_for_pickup: boolean
           barcode: string | null
           brand: string
@@ -514,7 +259,6 @@ export type Database = {
         Insert: {
           age_max_months?: number | null
           age_min_months?: number | null
-          available_for_delivery?: boolean
           available_for_pickup?: boolean
           barcode?: string | null
           brand?: string
@@ -564,7 +308,6 @@ export type Database = {
         Update: {
           age_max_months?: number | null
           age_min_months?: number | null
-          available_for_delivery?: boolean
           available_for_pickup?: boolean
           barcode?: string | null
           brand?: string
@@ -724,20 +467,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       admin_role: "OWNER" | "STAFF"
-      delivery_method: "PICKUP" | "DELIVERY"
-      order_status:
-        | "PENDING_PAYMENT"
-        | "CONFIRMED"
-        | "PROCESSING"
-        | "READY_FOR_PICKUP"
-        | "SHIPPED"
-        | "DELIVERED"
-        | "CANCELLED"
-        | "REFUNDED"
       product_relation_type: "RELATED" | "RECOMMENDED" | "FREQUENTLY_BOUGHT"
       stock_status: "IN_STOCK" | "LOW_STOCK" | "OUT_OF_STOCK" | "PREORDER"
     }

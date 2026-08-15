@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
-import { getBusinessInfo, getDeliverySettings } from "@/lib/business-info";
+import { getBusinessInfo } from "@/lib/business-info";
 import { formatPrice, discountPercent } from "@/lib/currency";
 import { productJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/shop/breadcrumbs";
 import { ProductGallery } from "@/components/product/product-gallery";
-import { AddToCartForm } from "@/components/product/add-to-cart-form";
+import { ProductCta } from "@/components/product/product-cta";
 import { ShareButtons } from "@/components/product/share-buttons";
 import { ProductCard } from "@/components/product/product-card";
-import { Truck, Store, ShieldCheck } from "lucide-react";
+import { Store, ShieldCheck } from "lucide-react";
 
 function localized(mn: string, en: string, locale: string) {
   return locale === "en" && en ? en : mn;
@@ -47,11 +47,10 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [locale, t, business, delivery, product] = await Promise.all([
+  const [locale, t, business, product] = await Promise.all([
     getLocale(),
     getTranslations("product"),
     getBusinessInfo(),
-    getDeliverySettings(),
     getProductBySlug(slug),
   ]);
 
@@ -179,22 +178,14 @@ export default async function ProductPage({
           {shortDesc && <p className="mt-4 text-brand-ink">{shortDesc}</p>}
 
           <div className="mt-6">
-            <AddToCartForm productId={product.id} disabled={product.stock_status === "OUT_OF_STOCK"} />
+            <ProductCta phone={business.phone} />
           </div>
 
           <div className="mt-6 space-y-2 rounded-card border border-brand-gray-light p-4 text-sm">
             {product.available_for_pickup && (
               <p className="flex items-center gap-2 text-brand-ink">
                 <Store className="h-4 w-4 text-brand-red" aria-hidden />
-                {locale === "en" ? "Available for store pickup at NEXT Plaza" : "NEXT Plaza дэлгүүрээс очиж авах боломжтой"}
-              </p>
-            )}
-            {product.available_for_delivery && delivery.delivery_enabled && (
-              <p className="flex items-center gap-2 text-brand-ink">
-                <Truck className="h-4 w-4 text-brand-red" aria-hidden />
-                {delivery.estimated_time_mn || delivery.estimated_time_en
-                  ? localized(delivery.estimated_time_mn, delivery.estimated_time_en, locale)
-                  : t("delivery")}
+                {locale === "en" ? "Available in store at NEXT Plaza" : "NEXT Plaza дэлгүүрт бэлэн байна"}
               </p>
             )}
             {safetyInfo && (

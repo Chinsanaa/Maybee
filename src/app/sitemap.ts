@@ -9,7 +9,6 @@ const STATIC_PATHS = [
   "/shop",
   "/store/next-plaza",
   "/contact",
-  "/policies/delivery",
   "/policies/returns",
   "/policies/privacy",
   "/policies/terms",

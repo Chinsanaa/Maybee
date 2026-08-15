@@ -8,7 +8,6 @@ const POLICIES: Record<
   string,
   { titleMn: string; titleEn: string }
 > = {
-  delivery: { titleMn: "Хүргэлтийн бодлого", titleEn: "Delivery Policy" },
   returns: { titleMn: "Буцаалт, солилцооны бодлого", titleEn: "Return & Refund Policy" },
   privacy: { titleMn: "Нууцлалын бодлого", titleEn: "Privacy Policy" },
   terms: { titleMn: "Үйлчилгээний нөхцөл", titleEn: "Terms of Service" },
@@ -57,8 +56,8 @@ export default async function PolicyPage({
       <div className="mt-6 rounded-card border border-brand-gray-light bg-white p-6 text-sm text-brand-gray">
         <p>
           {locale === "en"
-            ? `${business.name} is finalizing this policy. In the meantime, please contact us directly with any questions — we're happy to help before or after you order.`
-            : `${business.name} энэ бодлогыг эцэслэж байна. Асуух зүйл байвал захиалгын өмнө болон дараа бидэнтэй шууд холбогдоорой — бид туслахдаа таатай байх болно.`}
+            ? `${business.name} is finalizing this policy. In the meantime, please contact us directly with any questions — we're happy to help before or after your visit.`
+            : `${business.name} энэ бодлогыг эцэслэж байна. Асуух зүйл байвал бидэнтэй шууд холбогдоорой — бид туслахдаа таатай байх болно.`}
         </p>
         <p className="mt-4">
           {locale === "en" ? "Phone: " : "Утас: "}

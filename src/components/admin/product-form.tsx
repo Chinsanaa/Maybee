@@ -32,7 +32,6 @@ export type ProductFormValues = {
   safety_info_en: string;
   tags: string[];
   available_for_pickup: boolean;
-  available_for_delivery: boolean;
   is_featured: boolean;
   is_new_arrival: boolean;
   is_best_seller: boolean;
@@ -205,8 +204,7 @@ export function ProductForm({
 
       <section className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          ["available_for_pickup", "Store pickup"],
-          ["available_for_delivery", "Delivery"],
+          ["available_for_pickup", "Available in store"],
           ["is_featured", "Featured"],
           ["is_new_arrival", "New arrival"],
           ["is_best_seller", "Best seller"],

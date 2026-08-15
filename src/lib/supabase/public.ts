@@ -3,9 +3,9 @@ import type { Database } from "@/lib/database.types";
 
 /**
  * Anon-key client for public, RLS-governed reads (published products,
- * active categories, business info, delivery settings). Safe to use from
- * any server code — never bypasses RLS, so it can't leak unpublished data.
- * Cart/order/admin writes still go through the service-role client.
+ * active categories, business info). Safe to use from any server code —
+ * never bypasses RLS, so it can't leak unpublished data. Admin writes go
+ * through the session-bound client instead.
  */
 export function createPublicClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
