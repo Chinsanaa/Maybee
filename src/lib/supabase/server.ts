@@ -41,9 +41,10 @@ export async function createServerSupabaseClient() {
           cookiesToSet.forEach(({ name, value, options }) =>
             cookieStore.set(name, value, options)
           );
-        } catch {
+        } catch (err) {
           // Called from a Server Component without mutation access — safe to ignore
           // because middleware refreshes the session on navigation.
+          console.error("[supabase] cookie setAll failed", err);
         }
       },
     },
