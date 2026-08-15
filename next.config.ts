@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
         hostname: "*.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        // Used only for seeded demo-product placeholder images; real product
+        // photos are uploaded to Supabase Storage via the admin panel.
+        protocol: "https",
+        hostname: "placehold.co",
+      },
     ],
   },
 };

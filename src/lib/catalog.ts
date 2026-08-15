@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { createAdminClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Tables } from "@/lib/database.types";
 
 export type ProductWithImages = Tables<"product"> & {
@@ -11,7 +11,7 @@ const PRODUCT_SELECT =
   "*, product_image(*), category:category_id(id, name_mn, name_en, slug_mn, slug_en)";
 
 export const getFeaturedCategories = cache(async (limit = 8) => {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from("category")
     .select("*")
@@ -23,7 +23,7 @@ export const getFeaturedCategories = cache(async (limit = 8) => {
 });
 
 export const getAllCategories = cache(async () => {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from("category")
     .select("*")
@@ -33,7 +33,7 @@ export const getAllCategories = cache(async () => {
 });
 
 export const getCategoryBySlug = cache(async (slug: string) => {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from("category")
     .select("*")
@@ -58,7 +58,7 @@ export type ProductFilters = {
 };
 
 export async function listProducts(filters: ProductFilters = {}) {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const page = filters.page ?? 1;
   const pageSize = filters.pageSize ?? 24;
   let query = supabase
@@ -120,7 +120,7 @@ export const getFeaturedProducts = cache(async (limit = 8) => {
 });
 
 export const getProductBySlug = cache(async (slug: string) => {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from("product")
     .select(PRODUCT_SELECT)
@@ -131,7 +131,7 @@ export const getProductBySlug = cache(async (slug: string) => {
 });
 
 export const getRelatedProducts = cache(async (productId: string, limit = 4) => {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data: relations } = await supabase
     .from("product_relation")
     .select("to_product_id")
@@ -151,7 +151,7 @@ export const getRelatedProducts = cache(async (productId: string, limit = 4) => 
 
 export async function searchProducts(q: string, limit = 24) {
   if (!q.trim()) return [];
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data } = await supabase
     .from("product")
     .select(PRODUCT_SELECT)
@@ -164,7 +164,7 @@ export async function searchProducts(q: string, limit = 24) {
 }
 
 export const getDistinctBrands = cache(async () => {
-  const supabase = createAdminClient();
+  const supabase = createPublicClient();
   const { data } = await supabase.from("product").select("brand").eq("is_published", true);
   const brands = Array.from(new Set((data ?? []).map((p) => p.brand).filter(Boolean)));
   return brands.sort();

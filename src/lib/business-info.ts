@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { createAdminClient } from "@/lib/supabase/server";
+import { createPublicClient } from "@/lib/supabase/public";
 import type { Tables } from "@/lib/database.types";
 
 export type BusinessHours = Record<
@@ -49,7 +49,7 @@ const FALLBACK: BusinessInfo = {
  */
 export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
   try {
-    const supabase = createAdminClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from("business_info")
       .select("*")
@@ -81,7 +81,7 @@ const DELIVERY_FALLBACK: DeliverySettings = {
 
 export const getDeliverySettings = cache(async (): Promise<DeliverySettings> => {
   try {
-    const supabase = createAdminClient();
+    const supabase = createPublicClient();
     const { data } = await supabase
       .from("delivery_settings")
       .select("*")
