@@ -11,12 +11,16 @@ import {
   LogOut,
   ExternalLink,
   Link2,
+  MapPin,
+  Star,
 } from "lucide-react";
 
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
+  { href: "/admin/settings/locations", label: "Locations", icon: MapPin },
+  { href: "/admin/reviews", label: "Reviews", icon: Star },
   { href: "/admin/settings", label: "Settings", icon: Settings },
   { href: "/admin/settings/redirects", label: "SEO Redirects", icon: Link2 },
 ];

@@ -16,7 +16,7 @@ export async function ProductCta({ phone }: { phone: string }) {
         {t("callToOrder")}
       </a>
       <Link
-        href="/store/next-plaza"
+        href="/store"
         className="flex items-center gap-2 rounded-full border-2 border-brand-ink px-6 py-3 text-sm font-bold text-brand-ink hover:bg-brand-ink hover:text-white"
       >
         <Store className="h-4 w-4" aria-hidden />

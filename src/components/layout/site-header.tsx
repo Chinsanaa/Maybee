@@ -31,7 +31,13 @@ export async function SiteHeader({ business }: { business: BusinessInfo }) {
             {t("bestSellers")}
           </Link>
           <Link
-            href="/store/next-plaza"
+            href="/gift-finder"
+            className="text-sm font-medium text-brand-ink hover:text-brand-red"
+          >
+            Gift Finder
+          </Link>
+          <Link
+            href="/store"
             className="text-sm font-medium text-brand-ink hover:text-brand-red"
           >
             {t("store")}

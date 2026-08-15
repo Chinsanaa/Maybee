@@ -46,7 +46,15 @@
     "sku": "SKU",
     "brand": "Brand",
     "share": "Share",
-    "breadcrumbHome": "Home"
+    "breadcrumbHome": "Home",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet. Be the first!",
+    "writeReview": "Write a Review",
+    "reviewSubmitted": "Thank you! Your review will be published after moderation.",
+    "yourRating": "Your rating",
+    "yourName": "Your name",
+    "yourReview": "Your review",
+    "submitReview": "Submit"
   },
   "footer": {
     "aboutTitle": "Maybee Pop & Joy",
@@ -63,7 +71,7 @@
     "copyright": "All rights reserved."
   },
   "store": {
-    "title": "NEXT Plaza Store",
+    "title": "Store Locations",
     "address": "Address",
     "hours": "Hours",
     "phone": "Phone",

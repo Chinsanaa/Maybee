@@ -1,24 +1,21 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getAllCategories, getDistinctBrands } from "@/lib/catalog";
+import { AGE_BANDS as AGE_BAND_DEFS, BUDGET_BANDS as BUDGET_BAND_DEFS } from "@/lib/collections";
 import { mergeQuery } from "@/lib/query";
 import { cn } from "@/lib/utils";
 
-const AGE_BANDS = [
-  { labelMn: "0-2 нас", labelEn: "0-2 yrs", value: "0" },
-  { labelMn: "2-3 нас", labelEn: "2-3 yrs", value: "24" },
-  { labelMn: "3-5 нас", labelEn: "3-5 yrs", value: "36" },
-  { labelMn: "5-7 нас", labelEn: "5-7 yrs", value: "60" },
-  { labelMn: "7-10 нас", labelEn: "7-10 yrs", value: "84" },
-  { labelMn: "10+ нас", labelEn: "10+ yrs", value: "120" },
-];
+const AGE_BANDS = AGE_BAND_DEFS.map((b) => ({
+  labelMn: b.labelMn,
+  labelEn: b.labelEn,
+  value: String(b.minMonths),
+}));
 
-const PRICE_BANDS = [
-  { labelMn: "20,000₮ хүртэл", labelEn: "Under 20,000₮", value: "20000" },
-  { labelMn: "30,000₮ хүртэл", labelEn: "Under 30,000₮", value: "30000" },
-  { labelMn: "50,000₮ хүртэл", labelEn: "Under 50,000₮", value: "50000" },
-  { labelMn: "100,000₮ хүртэл", labelEn: "Under 100,000₮", value: "100000" },
-];
+const PRICE_BANDS = BUDGET_BAND_DEFS.filter((b) => b.maxPrice !== null).map((b) => ({
+  labelMn: b.labelMn,
+  labelEn: b.labelEn,
+  value: String(b.maxPrice),
+}));
 
 function localized(mn: string, en: string, locale: string) {
   return locale === "en" && en ? en : mn;

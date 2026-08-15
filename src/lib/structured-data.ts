@@ -1,4 +1,4 @@
-import type { BusinessInfo } from "@/lib/business-info";
+import type { BusinessInfo, StoreLocation } from "@/lib/business-info";
 import type { Tables } from "@/lib/database.types";
 
 const siteUrl = () => process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
@@ -41,34 +41,35 @@ const DAY_MAP: Record<string, string> = {
   sun: "Sunday",
 };
 
-export function localBusinessJsonLd(business: BusinessInfo) {
-  const openingHours = Object.entries(business.hours || {})
+/** LocalBusiness schema for one specific branch (Maybee has multiple). */
+export function localBusinessJsonLd(location: StoreLocation, business: BusinessInfo, locale: string) {
+  const openingHours = Object.entries(location.hours || {})
     .filter(([, v]) => v)
     .map(([day, v]) => `${DAY_MAP[day]} ${v!.open}-${v!.close}`);
 
   return {
     "@context": "https://schema.org",
     "@type": "ToyStore",
-    name: business.name,
-    image: business.logo_url || undefined,
-    telephone: business.phone || undefined,
+    name: `${business.name} — ${location.name_mn}`,
+    image: location.image_url || business.logo_url || undefined,
+    telephone: location.phone || business.phone || undefined,
     address: {
       "@type": "PostalAddress",
-      streetAddress: business.address,
-      addressLocality: business.city,
-      addressRegion: business.district || undefined,
+      streetAddress: location.address,
+      addressLocality: location.city,
+      addressRegion: location.district || undefined,
       addressCountry: "MN",
     },
     geo:
-      business.latitude && business.longitude
+      location.latitude && location.longitude
         ? {
             "@type": "GeoCoordinates",
-            latitude: business.latitude,
-            longitude: business.longitude,
+            latitude: location.latitude,
+            longitude: location.longitude,
           }
         : undefined,
     openingHoursSpecification: openingHours,
-    url: `${siteUrl()}/mn/store/next-plaza`,
+    url: `${siteUrl()}/${locale}/store/${location.slug}`,
     sameAs: [business.instagram_url, business.facebook_url].filter(Boolean),
   };
 }
@@ -91,7 +92,8 @@ type ProductWithImages = Tables<"product"> & { product_image: Tables<"product_im
 export function productJsonLd(
   product: ProductWithImages,
   locale: string,
-  business: BusinessInfo
+  business: BusinessInfo,
+  reviewStats?: { count: number; average: number } | null
 ) {
   const name = locale === "en" && product.name_en ? product.name_en : product.name_mn;
   const description =
@@ -105,6 +107,15 @@ export function productJsonLd(
     sku: product.sku,
     brand: product.brand ? { "@type": "Brand", name: product.brand } : undefined,
     image: product.product_image.map((img) => img.url),
+    // Only included when real approved reviews exist — never fabricated.
+    aggregateRating:
+      reviewStats && reviewStats.count > 0
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: reviewStats.average,
+            reviewCount: reviewStats.count,
+          }
+        : undefined,
     offers: {
       "@type": "Offer",
       priceCurrency: product.currency_code,

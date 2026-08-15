@@ -46,7 +46,15 @@
     "sku": "Барааны код",
     "brand": "Брэнд",
     "share": "Хуваалцах",
-    "breadcrumbHome": "Нүүр"
+    "breadcrumbHome": "Нүүр",
+    "reviews": "Сэтгэгдэл",
+    "noReviews": "Одоогоор сэтгэгдэл алга. Эхнийх нь та байгаарай!",
+    "writeReview": "Сэтгэгдэл бичих",
+    "reviewSubmitted": "Баярлалаа! Таны сэтгэгдлийг хянасны дараа нийтэлнэ.",
+    "yourRating": "Таны үнэлгээ",
+    "yourName": "Таны нэр",
+    "yourReview": "Сэтгэгдэл",
+    "submitReview": "Илгээх"
   },
   "footer": {
     "aboutTitle": "Maybee Pop & Joy",
@@ -63,7 +71,7 @@
     "copyright": "Бүх эрх хуулиар хамгаалагдсан."
   },
   "store": {
-    "title": "NEXT Plaza дэлгүүр",
+    "title": "Дэлгүүрийн байршил",
     "address": "Хаяг",
     "hours": "Ажиллах цаг",
     "phone": "Утас",

@@ -2,12 +2,7 @@ import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
 import type { Tables } from "@/lib/database.types";
 
-export type BusinessHours = Record<
-  "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun",
-  { open: string; close: string } | null
->;
-
-export type BusinessInfo = Tables<"business_info"> & { hours: BusinessHours };
+export type BusinessInfo = Tables<"business_info">;
 
 const FALLBACK: BusinessInfo = {
   id: 1,
@@ -15,21 +10,6 @@ const FALLBACK: BusinessInfo = {
   description_mn: "",
   description_en: "",
   phone: "",
-  address: "",
-  address_mn: "",
-  district: "",
-  city: "Улаанбаатар",
-  latitude: null,
-  longitude: null,
-  hours: {
-    mon: { open: "11:00", close: "21:00" },
-    tue: { open: "11:00", close: "21:00" },
-    wed: { open: "11:00", close: "21:00" },
-    thu: { open: "11:00", close: "21:00" },
-    fri: { open: "11:00", close: "21:00" },
-    sat: { open: "11:00", close: "21:00" },
-    sun: { open: "11:00", close: "21:00" },
-  },
   instagram_url: "",
   facebook_url: "",
   tiktok_url: "",
@@ -37,14 +17,14 @@ const FALLBACK: BusinessInfo = {
   currency_code: "MNT",
   currency_symbol: "₮",
   google_review_url: "",
-  google_maps_embed_url: "",
   updated_at: new Date().toISOString(),
 };
 
 /**
- * Single source of truth for business info (address, hours, phone, socials).
- * Every page that needs this data (header, footer, store page, JSON-LD,
- * contact page) reads from here — never hardcode these values elsewhere.
+ * Single source of truth for brand-level business info (name, phone,
+ * description, socials). Location-specific data (address, hours,
+ * coordinates, map) lives in `store_location` — see `getStoreLocations()`
+ * below, since Maybee has multiple physical branches.
  * Cached per-request via React `cache` since it's read many times per render.
  */
 export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
@@ -57,9 +37,60 @@ export const getBusinessInfo = cache(async (): Promise<BusinessInfo> => {
       .maybeSingle();
 
     if (!data) return FALLBACK;
-    return { ...FALLBACK, ...data, hours: (data.hours as BusinessHours) ?? FALLBACK.hours };
+    return { ...FALLBACK, ...data };
   } catch {
     return FALLBACK;
+  }
+});
+
+export type BusinessHours = Record<
+  "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun",
+  { open: string; close: string } | null
+>;
+
+export type StoreLocation = Omit<Tables<"store_location">, "hours"> & { hours: BusinessHours };
+
+const EMPTY_HOURS: BusinessHours = {
+  mon: null,
+  tue: null,
+  wed: null,
+  thu: null,
+  fri: null,
+  sat: null,
+  sun: null,
+};
+
+function toStoreLocation(row: Tables<"store_location">): StoreLocation {
+  return { ...row, hours: (row.hours as BusinessHours) ?? EMPTY_HOURS };
+}
+
+/** All active branches, ordered for display (primary/lowest sort_order first). */
+export const getStoreLocations = cache(async (): Promise<StoreLocation[]> => {
+  try {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from("store_location")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order", { ascending: true });
+    return (data ?? []).map(toStoreLocation);
+  } catch {
+    return [];
+  }
+});
+
+export const getStoreLocationBySlug = cache(async (slug: string): Promise<StoreLocation | null> => {
+  try {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from("store_location")
+      .select("*")
+      .eq("slug", slug)
+      .eq("is_active", true)
+      .maybeSingle();
+    return data ? toStoreLocation(data) : null;
+  } catch {
+    return null;
   }
 });
 

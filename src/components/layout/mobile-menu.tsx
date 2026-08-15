@@ -35,7 +35,10 @@ export function MobileMenu() {
           <Link href="/shop?filter=bestseller" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
             {t("bestSellers")}
           </Link>
-          <Link href="/store/next-plaza" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+          <Link href="/gift-finder" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+            Gift Finder
+          </Link>
+          <Link href="/store" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
             {t("store")}
           </Link>
         </nav>

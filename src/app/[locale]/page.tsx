@@ -1,42 +1,27 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
-import { getBusinessInfo } from "@/lib/business-info";
+import { getBusinessInfo, getStoreLocations, formatHoursSummary } from "@/lib/business-info";
 import {
   getFeaturedCategories,
   getBestSellers,
   getNewArrivals,
   getFeaturedProducts,
 } from "@/lib/catalog";
+import { AGE_BANDS, BUDGET_BANDS } from "@/lib/collections";
 import { ProductCard } from "@/components/product/product-card";
-import { MapPin, Phone, Clock, ShieldCheck, Gift, Store } from "lucide-react";
-import { formatHoursSummary } from "@/lib/business-info";
+import { MapPin, Phone, Clock, ShieldCheck, Gift, Store, Sparkles } from "lucide-react";
 
 function localized(mn: string, en: string, locale: string) {
   return locale === "en" && en ? en : mn;
 }
 
-const AGE_BANDS = [
-  { labelMn: "0-2 нас", labelEn: "0-2 yrs", min: 0 },
-  { labelMn: "2-3 нас", labelEn: "2-3 yrs", min: 24 },
-  { labelMn: "3-5 нас", labelEn: "3-5 yrs", min: 36 },
-  { labelMn: "5-7 нас", labelEn: "5-7 yrs", min: 60 },
-  { labelMn: "7-10 нас", labelEn: "7-10 yrs", min: 84 },
-  { labelMn: "10+ нас", labelEn: "10+ yrs", min: 120 },
-];
-
-const BUDGET_BANDS = [
-  { labelMn: "20,000₮ хүртэл", labelEn: "Under 20,000₮", max: 20000 },
-  { labelMn: "30,000₮ хүртэл", labelEn: "Under 30,000₮", max: 30000 },
-  { labelMn: "50,000₮ хүртэл", labelEn: "Under 50,000₮", max: 50000 },
-  { labelMn: "100,000₮ хүртэл", labelEn: "Under 100,000₮", max: 100000 },
-];
-
 export default async function HomePage() {
   const locale = await getLocale();
-  const [t, business, categories, bestSellers, newArrivals, featured] = await Promise.all([
+  const [t, business, locations, categories, bestSellers, newArrivals, featured] = await Promise.all([
     getTranslations("home"),
     getBusinessInfo(),
+    getStoreLocations(),
     getFeaturedCategories(),
     getBestSellers(),
     getNewArrivals(),
@@ -60,7 +45,7 @@ export default async function HomePage() {
               {t("ctaShop")}
             </Link>
             <Link
-              href="/shop?filter=featured"
+              href="/gift-finder"
               className="rounded-full border-2 border-white px-6 py-3 text-sm font-bold text-white hover:bg-white/10"
             >
               {t("ctaGifts")}
@@ -133,14 +118,28 @@ export default async function HomePage() {
           </section>
         )}
 
+        {/* Gift Finder */}
+        <section className="mt-14 rounded-card bg-brand-honey/20 p-8 text-center">
+          <Sparkles className="mx-auto h-8 w-8 text-brand-red" aria-hidden />
+          <h2 className="font-display mt-3 text-2xl font-bold text-brand-ink">{t("giftFinderTitle")}</h2>
+          <p className="mx-auto mt-2 max-w-lg text-sm text-brand-gray">{t("giftFinderSubtitle")}</p>
+          <Link
+            href="/gift-finder"
+            data-analytics-event="view_gift_finder"
+            className="mt-5 inline-block rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark"
+          >
+            {t("giftFinderCta")}
+          </Link>
+        </section>
+
         {/* Shop by age */}
         <section className="mt-14">
           <h2 className="font-display text-2xl font-bold text-brand-ink">{t("shopByAge")}</h2>
           <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-6">
             {AGE_BANDS.map((band) => (
               <Link
-                key={band.min}
-                href={`/shop?age=${band.min}`}
+                key={band.slug}
+                href={`/gifts/age/${band.slug}`}
                 className="rounded-full border border-brand-gray-light bg-white px-3 py-2 text-center text-sm font-semibold text-brand-ink hover:border-brand-red hover:text-brand-red"
               >
                 {localized(band.labelMn, band.labelEn, locale)}
@@ -152,11 +151,11 @@ export default async function HomePage() {
         {/* Shop by budget */}
         <section className="mt-10">
           <h2 className="font-display text-2xl font-bold text-brand-ink">{t("shopByBudget")}</h2>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
             {BUDGET_BANDS.map((band) => (
               <Link
-                key={band.max}
-                href={`/shop?maxPrice=${band.max}`}
+                key={band.slug}
+                href={`/gifts/budget/${band.slug}`}
                 className="rounded-full border border-brand-gray-light bg-white px-3 py-2 text-center text-sm font-semibold text-brand-ink hover:border-brand-red hover:text-brand-red"
               >
                 {localized(band.labelMn, band.labelEn, locale)}
@@ -187,8 +186,8 @@ export default async function HomePage() {
               <Store className="h-6 w-6 text-brand-red" aria-hidden />
               <p className="text-sm text-brand-gray">
                 {locale === "en"
-                  ? "A physical store in Ulaanbaatar you can visit."
-                  : "Улаанбаатар хотод биечлэн зочилж болох дэлгүүртэй."}
+                  ? "Two physical stores in Ulaanbaatar you can visit."
+                  : "Улаанбаатар хотод биечлэн зочилж болох 2 дэлгүүртэй."}
               </p>
             </div>
             <div className="flex flex-col items-start gap-2">
@@ -211,41 +210,44 @@ export default async function HomePage() {
         </section>
 
         {/* Store section */}
-        <section className="mt-14 grid gap-6 rounded-card bg-brand-charcoal p-8 text-white md:grid-cols-2">
-          <div>
-            <h2 className="font-display text-2xl font-bold">{t("storeTitle")}</h2>
-            <ul className="mt-4 space-y-3 text-sm text-white/90">
-              <li className="flex items-start gap-2">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                {business.address}
-              </li>
-              <li className="flex items-start gap-2">
-                <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                {formatHoursSummary(business.hours, locale)}
-              </li>
-              <li className="flex items-start gap-2">
-                <Phone className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-                <a href={`tel:${business.phone.replace(/\s+/g, "")}`} data-analytics-event="click_phone">
-                  {business.phone}
-                </a>
-              </li>
-            </ul>
-            <Link
-              href="/store/next-plaza"
-              className="mt-6 inline-block rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark"
-            >
-              {locale === "en" ? "Get Directions" : "Чиглэл харах"}
-            </Link>
+        <section className="mt-14 rounded-card bg-brand-charcoal p-8 text-white">
+          <h2 className="font-display text-2xl font-bold">{t("storeTitle")}</h2>
+          <div className="mt-6 grid gap-6 sm:grid-cols-2">
+            {locations.map((location) => (
+              <div key={location.id} className="rounded-card bg-white/10 p-5">
+                <h3 className="font-display text-lg font-bold">
+                  {localized(location.name_mn, location.name_en, locale)}
+                </h3>
+                <ul className="mt-3 space-y-2 text-sm text-white/90">
+                  <li className="flex items-start gap-2">
+                    <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                    {localized(location.address_mn, location.address, locale) || location.address}
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                    {formatHoursSummary(location.hours, locale)}
+                  </li>
+                  {(location.phone || business.phone) && (
+                    <li className="flex items-start gap-2">
+                      <Phone className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                      <a
+                        href={`tel:${(location.phone || business.phone).replace(/\s+/g, "")}`}
+                        data-analytics-event="click_phone"
+                      >
+                        {location.phone || business.phone}
+                      </a>
+                    </li>
+                  )}
+                </ul>
+                <Link
+                  href={`/store/${location.slug}`}
+                  className="mt-4 inline-block rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark"
+                >
+                  {locale === "en" ? "Get Directions" : "Чиглэл харах"}
+                </Link>
+              </div>
+            ))}
           </div>
-          {business.google_maps_embed_url && (
-            <iframe
-              title="Maybee Pop & Joy — Google Maps"
-              src={business.google_maps_embed_url}
-              className="h-64 w-full rounded-card border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-          )}
         </section>
       </div>
     </div>

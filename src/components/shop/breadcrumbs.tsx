@@ -12,7 +12,6 @@ export function Breadcrumbs({
     <nav aria-label="Breadcrumb" className="mb-4 text-sm text-brand-gray">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(
             breadcrumbJsonLd(items.map((i) => ({ name: i.name, url: `/${locale}${i.href}` })))

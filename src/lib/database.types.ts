@@ -41,69 +41,45 @@ export type Database = {
       }
       business_info: {
         Row: {
-          address: string
-          address_mn: string
-          city: string
           currency_code: string
           currency_symbol: string
           description_en: string
           description_mn: string
-          district: string
           facebook_url: string
-          google_maps_embed_url: string
           google_review_url: string
-          hours: Json
           id: number
           instagram_url: string
-          latitude: number | null
           logo_url: string
-          longitude: number | null
           name: string
           phone: string
           tiktok_url: string
           updated_at: string
         }
         Insert: {
-          address?: string
-          address_mn?: string
-          city?: string
           currency_code?: string
           currency_symbol?: string
           description_en?: string
           description_mn?: string
-          district?: string
           facebook_url?: string
-          google_maps_embed_url?: string
           google_review_url?: string
-          hours?: Json
           id?: number
           instagram_url?: string
-          latitude?: number | null
           logo_url?: string
-          longitude?: number | null
           name?: string
           phone?: string
           tiktok_url?: string
           updated_at?: string
         }
         Update: {
-          address?: string
-          address_mn?: string
-          city?: string
           currency_code?: string
           currency_symbol?: string
           description_en?: string
           description_mn?: string
-          district?: string
           facebook_url?: string
-          google_maps_embed_url?: string
           google_review_url?: string
-          hours?: Json
           id?: number
           instagram_url?: string
-          latitude?: number | null
           logo_url?: string
-          longitude?: number | null
           name?: string
           phone?: string
           tiktok_url?: string
@@ -438,6 +414,47 @@ export type Database = {
           },
         ]
       }
+      product_review: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: string
+          is_approved: boolean
+          photo_url: string | null
+          product_id: string
+          rating: number
+          review_text: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          id?: string
+          is_approved?: boolean
+          photo_url?: string | null
+          product_id: string
+          rating: number
+          review_text?: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          is_approved?: boolean
+          photo_url?: string | null
+          product_id?: string
+          rating?: number
+          review_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_review_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seo_redirect: {
         Row: {
           created_at: string
@@ -459,6 +476,72 @@ export type Database = {
           id?: string
           status_code?: number
           to_path?: string
+        }
+        Relationships: []
+      }
+      store_location: {
+        Row: {
+          address: string
+          address_mn: string
+          city: string
+          created_at: string
+          district: string
+          google_maps_embed_url: string
+          hours: Json
+          id: string
+          image_url: string
+          is_active: boolean
+          is_primary: boolean
+          latitude: number | null
+          longitude: number | null
+          name_en: string
+          name_mn: string
+          phone: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string
+          address_mn?: string
+          city?: string
+          created_at?: string
+          district?: string
+          google_maps_embed_url?: string
+          hours?: Json
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          is_primary?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name_en?: string
+          name_mn: string
+          phone?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          address_mn?: string
+          city?: string
+          created_at?: string
+          district?: string
+          google_maps_embed_url?: string
+          hours?: Json
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          is_primary?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name_en?: string
+          name_mn?: string
+          phone?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
