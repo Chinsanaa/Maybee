@@ -11,6 +11,7 @@ import {
   Settings,
   LogOut,
   ExternalLink,
+  Link2,
 } from "lucide-react";
 
 const NAV = [
@@ -19,6 +20,7 @@ const NAV = [
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
   { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/settings/redirects", label: "SEO Redirects", icon: Link2 },
 ];
 
 export default async function AdminDashboardLayout({ children }: { children: ReactNode }) {

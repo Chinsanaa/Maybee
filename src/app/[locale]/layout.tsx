@@ -33,12 +33,18 @@ export async function generateMetadata({
     },
     description: locale === "en" ? business.description_en : business.description_mn,
     alternates: {
+      canonical: `/${locale}`,
       languages: { mn: "/mn", en: "/en" },
     },
     openGraph: {
       siteName: business.name,
       locale: locale === "mn" ? "mn_MN" : "en_US",
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: business.name,
+      description: locale === "en" ? business.description_en : business.description_mn,
     },
     icons: { icon: "/favicon.ico" },
   };
