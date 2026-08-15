@@ -52,6 +52,7 @@ export type CartLine = {
   nameMn: string;
   nameEn: string;
   slugMn: string;
+  sku: string;
   price: number;
   compareAtPrice: number | null;
   imageUrl: string | null;
@@ -64,77 +65,96 @@ export async function getCart(): Promise<{ id: string; items: CartLine[] }> {
   const token = cookieStore.get(CART_COOKIE)?.value;
   if (!token) return { id: "", items: [] };
 
-  const supabase = createAdminClient();
-  const { data: cart } = await supabase.from("cart").select("id").eq("token", token).maybeSingle();
-  if (!cart) return { id: "", items: [] };
+  try {
+    const supabase = createAdminClient();
+    const { data: cart } = await supabase.from("cart").select("id").eq("token", token).maybeSingle();
+    if (!cart) return { id: "", items: [] };
 
-  const { data: items } = await supabase
-    .from("cart_item")
-    .select(
-      "id, quantity, product:product_id ( id, name_mn, name_en, slug_mn, price, compare_at_price, stock_quantity, stock_status, product_image ( url, is_primary ) )"
-    )
-    .eq("cart_id", cart.id);
+    const { data: items } = await supabase
+      .from("cart_item")
+      .select(
+        "id, quantity, product:product_id ( id, name_mn, name_en, slug_mn, sku, price, compare_at_price, stock_quantity, stock_status, product_image ( url, is_primary ) )"
+      )
+      .eq("cart_id", cart.id);
 
-  const lines: CartLine[] = (items ?? [])
-    .filter((i) => i.product)
-    .map((i) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const p = i.product as any;
-      const primaryImage =
-        p.product_image?.find((img: { is_primary: boolean }) => img.is_primary) ??
-        p.product_image?.[0];
-      return {
-        id: i.id,
-        productId: p.id,
-        quantity: i.quantity,
-        nameMn: p.name_mn,
-        nameEn: p.name_en,
-        slugMn: p.slug_mn,
-        price: p.price,
-        compareAtPrice: p.compare_at_price,
-        imageUrl: primaryImage?.url ?? null,
-        stockQuantity: p.stock_quantity,
-        stockStatus: p.stock_status,
-      };
-    });
+    const lines: CartLine[] = (items ?? [])
+      .filter((i) => i.product)
+      .map((i) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const p = i.product as any;
+        const primaryImage =
+          p.product_image?.find((img: { is_primary: boolean }) => img.is_primary) ??
+          p.product_image?.[0];
+        return {
+          id: i.id,
+          productId: p.id,
+          quantity: i.quantity,
+          nameMn: p.name_mn,
+          nameEn: p.name_en,
+          slugMn: p.slug_mn,
+          sku: p.sku,
+          price: p.price,
+          compareAtPrice: p.compare_at_price,
+          imageUrl: primaryImage?.url ?? null,
+          stockQuantity: p.stock_quantity,
+          stockStatus: p.stock_status,
+        };
+      });
 
-  return { id: cart.id, items: lines };
+    return { id: cart.id, items: lines };
+  } catch {
+    // SUPABASE_SERVICE_ROLE_KEY not configured yet, or a transient DB error —
+    // fail soft so the cart badge/page never takes down the whole site.
+    return { id: "", items: [] };
+  }
 }
 
 export async function addToCart(productId: string, quantity = 1) {
-  const token = await getOrCreateCartToken();
-  const cartId = await getCartId(token);
-  const supabase = createAdminClient();
+  try {
+    const token = await getOrCreateCartToken();
+    const cartId = await getCartId(token);
+    const supabase = createAdminClient();
 
-  const { data: existing } = await supabase
-    .from("cart_item")
-    .select("id, quantity")
-    .eq("cart_id", cartId)
-    .eq("product_id", productId)
-    .maybeSingle();
-
-  if (existing) {
-    await supabase
+    const { data: existing } = await supabase
       .from("cart_item")
-      .update({ quantity: existing.quantity + quantity })
-      .eq("id", existing.id);
-  } else {
-    await supabase.from("cart_item").insert({ cart_id: cartId, product_id: productId, quantity });
+      .select("id, quantity")
+      .eq("cart_id", cartId)
+      .eq("product_id", productId)
+      .maybeSingle();
+
+    if (existing) {
+      await supabase
+        .from("cart_item")
+        .update({ quantity: existing.quantity + quantity })
+        .eq("id", existing.id);
+    } else {
+      await supabase.from("cart_item").insert({ cart_id: cartId, product_id: productId, quantity });
+    }
+  } catch (err) {
+    console.error("[cart] addToCart failed — is SUPABASE_SERVICE_ROLE_KEY configured?", err);
   }
 }
 
 export async function updateCartItemQuantity(cartItemId: string, quantity: number) {
-  const supabase = createAdminClient();
-  if (quantity <= 0) {
-    await supabase.from("cart_item").delete().eq("id", cartItemId);
-  } else {
-    await supabase.from("cart_item").update({ quantity }).eq("id", cartItemId);
+  try {
+    const supabase = createAdminClient();
+    if (quantity <= 0) {
+      await supabase.from("cart_item").delete().eq("id", cartItemId);
+    } else {
+      await supabase.from("cart_item").update({ quantity }).eq("id", cartItemId);
+    }
+  } catch (err) {
+    console.error("[cart] updateCartItemQuantity failed", err);
   }
 }
 
 export async function removeCartItem(cartItemId: string) {
-  const supabase = createAdminClient();
-  await supabase.from("cart_item").delete().eq("id", cartItemId);
+  try {
+    const supabase = createAdminClient();
+    await supabase.from("cart_item").delete().eq("id", cartItemId);
+  } catch (err) {
+    console.error("[cart] removeCartItem failed", err);
+  }
 }
 
 export async function clearCart(cartId: string) {
