@@ -1,0 +1,91 @@
+{
+  "nav": {
+    "shop": "Дэлгүүр",
+    "categories": "Ангилал",
+    "gifts": "Бэлэг",
+    "newArrivals": "Шинээр ирсэн",
+    "bestSellers": "Хамгийн эрэлттэй",
+    "about": "Бидний тухай",
+    "store": "Дэлгүүрийн байршил",
+    "search": "Хайх",
+    "searchPlaceholder": "Тоглоом, брэнд, ангилал хайх...",
+    "account": "Хэрэглэгч",
+    "menu": "Цэс",
+    "language": "Хэл"
+  },
+  "home": {
+    "heroTitle": "Хүүхдийн тоглоом, бэлгийг нэг дор",
+    "heroSubtitle": "Улаанбаатар хотод байрлах Maybee Pop & Joy-ноос нас насанд тохирсон тоглоом, бэлгийн зөв сонголтыг хийгээрэй.",
+    "ctaShop": "Тоглоом үзэх",
+    "ctaGifts": "Бэлэг сонгох",
+    "featuredCategories": "Онцлох ангилал",
+    "bestSellers": "Хамгийн эрэлттэй",
+    "newArrivals": "Шинээр ирсэн",
+    "giftFinderTitle": "Бэлэг сонгоход хэцүү байна уу?",
+    "giftFinderSubtitle": "Насыг нь сонгоод, төсөвт багтах хамгийн тохиромжтой бэлгийг хамтдаа олоорой.",
+    "giftFinderCta": "Бэлэг олох",
+    "shopByAge": "Насаар сонгох",
+    "shopByBudget": "Төсвөөр сонгох",
+    "featuredProducts": "Онцлох бүтээгдэхүүн",
+    "whyMaybeeTitle": "Яагаад Maybee Pop & Joy вэ?",
+    "storeTitle": "Манай дэлгүүрт зочилно уу",
+    "viewAll": "Бүгдийг үзэх"
+  },
+  "product": {
+    "callToOrder": "Утсаар захиалах",
+    "quantity": "Тоо ширхэг",
+    "outOfStock": "Дууссан",
+    "inStock": "Байгаа",
+    "lowStock": "Цөөн үлдсэн",
+    "ageRecommendation": "Тохиромжтой нас",
+    "description": "Дэлгэрэнгүй тайлбар",
+    "features": "Онцлог",
+    "whatsIncluded": "Юу орсон бэ",
+    "safetyInfo": "Аюулгүй байдлын мэдээлэл",
+    "relatedProducts": "Төстэй бүтээгдэхүүн",
+    "sku": "Барааны код",
+    "brand": "Брэнд",
+    "share": "Хуваалцах",
+    "breadcrumbHome": "Нүүр"
+  },
+  "footer": {
+    "aboutTitle": "Maybee Pop & Joy",
+    "aboutText": "Улаанбаатар хотын хүүхдийн тоглоом, бэлгийн дэлгүүр.",
+    "shop": "Дэлгүүр",
+    "help": "Тусламж",
+    "returns": "Буцаалтын бодлого",
+    "privacy": "Нууцлалын бодлого",
+    "terms": "Үйлчилгээний нөхцөл",
+    "contact": "Холбоо барих",
+    "storeLocation": "Дэлгүүрийн байршил",
+    "phone": "Утас",
+    "hours": "Ажиллах цаг",
+    "copyright": "Бүх эрх хуулиар хамгаалагдсан."
+  },
+  "store": {
+    "title": "NEXT Plaza дэлгүүр",
+    "address": "Хаяг",
+    "hours": "Ажиллах цаг",
+    "phone": "Утас",
+    "directions": "Чиглэл харах",
+    "faqTitle": "Байршлын талаар түгээмэл асуулт"
+  },
+  "contact": {
+    "title": "Холбоо барих",
+    "formName": "Таны нэр",
+    "formPhone": "Утасны дугаар",
+    "formMessage": "Захиас",
+    "formSubmit": "Илгээх",
+    "formSuccess": "Баярлалаа! Бид тантай удахгүй холбогдоно."
+  },
+  "search": {
+    "title": "Хайлтын үр дүн",
+    "noResults": "Хайлтад тохирох бүтээгдэхүүн олдсонгүй.",
+    "resultsFor": "Хайлтын түлхүүр үг"
+  },
+  "notFound": {
+    "title": "Хуудас олдсонгүй",
+    "subtitle": "Уучлаарай, таны хайсан хуудас олдсонгүй.",
+    "cta": "Нүүр хуудас руу буцах"
+  }
+}

@@ -1,0 +1,67 @@
+@import "tailwindcss";
+
+:root {
+  /* Brand tokens — sourced from the Maybee Pop & Joy logo, with the primary
+     red and neutrals tuned to match next.mn's palette/vibe (NEXT Plaza is
+     Maybee's physical location) for local brand consistency.
+     Centralized here so the palette/typography can be retuned
+     in one place without touching component code. */
+  --color-brand-red: #f40009;
+  --color-brand-red-dark: #c10024;
+  --color-brand-ink: #171717;
+  --color-brand-charcoal: #404248;
+  --color-brand-white: #ffffff;
+  --color-brand-cream: #fffbf7;
+  --color-brand-gray: #6b6b6b;
+  --color-brand-gray-light: #e9e5e1;
+  --color-brand-honey: #ffc93c;
+
+  --background: var(--color-brand-cream);
+  --foreground: var(--color-brand-ink);
+
+  --radius-card: 0.875rem;
+  --radius-pill: 999px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-brand-red: var(--color-brand-red);
+  --color-brand-red-dark: var(--color-brand-red-dark);
+  --color-brand-ink: var(--color-brand-ink);
+  --color-brand-charcoal: var(--color-brand-charcoal);
+  --color-brand-white: var(--color-brand-white);
+  --color-brand-cream: var(--color-brand-cream);
+  --color-brand-gray: var(--color-brand-gray);
+  --color-brand-gray-light: var(--color-brand-gray-light);
+  --color-brand-honey: var(--color-brand-honey);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-body), system-ui, sans-serif;
+}
+
+/* Visible focus states for accessibility (WCAG) */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-brand-red);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
