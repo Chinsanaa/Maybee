@@ -32,7 +32,7 @@
     "viewAll": "View All"
   },
   "product": {
-    "callToOrder": "Call to Order",
+    "callToInquire": "Call with Questions",
     "quantity": "Quantity",
     "outOfStock": "Out of Stock",
     "inStock": "In Stock",

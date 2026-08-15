@@ -32,7 +32,7 @@
     "viewAll": "Бүгдийг үзэх"
   },
   "product": {
-    "callToOrder": "Утсаар захиалах",
+    "callToInquire": "Асуулт байвал холбогдох",
     "quantity": "Тоо ширхэг",
     "outOfStock": "Дууссан",
     "inStock": "Байгаа",

@@ -7,21 +7,21 @@ export async function ProductCta({ phone }: { phone: string }) {
 
   return (
     <div className="flex flex-wrap gap-3">
+      <Link
+        href="/store"
+        className="flex items-center gap-2 rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark"
+      >
+        <Store className="h-4 w-4" aria-hidden />
+        {locale === "en" ? "Visit Store to Buy" : "Дэлгүүрээс худалдаж авах"}
+      </Link>
       <a
         href={`tel:${phone.replace(/\s+/g, "")}`}
         data-analytics-event="click_phone"
-        className="flex items-center gap-2 rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark"
-      >
-        <Phone className="h-4 w-4" aria-hidden />
-        {t("callToOrder")}
-      </a>
-      <Link
-        href="/store"
         className="flex items-center gap-2 rounded-full border-2 border-brand-ink px-6 py-3 text-sm font-bold text-brand-ink hover:bg-brand-ink hover:text-white"
       >
-        <Store className="h-4 w-4" aria-hidden />
-        {locale === "en" ? "Visit Store" : "Дэлгүүрт зочлох"}
-      </Link>
+        <Phone className="h-4 w-4" aria-hidden />
+        {t("callToInquire")}
+      </a>
     </div>
   );
 }
