@@ -1,0 +1,129 @@
+{
+  "nav": {
+    "shop": "Shop",
+    "categories": "Categories",
+    "gifts": "Gifts",
+    "newArrivals": "New Arrivals",
+    "bestSellers": "Best Sellers",
+    "about": "About",
+    "store": "Store Location",
+    "search": "Search",
+    "searchPlaceholder": "Search toys, brands, categories...",
+    "cart": "Cart",
+    "account": "Account",
+    "menu": "Menu",
+    "language": "Language"
+  },
+  "home": {
+    "heroTitle": "Toys and gifts for kids, all in one place",
+    "heroSubtitle": "Find age-appropriate toys and thoughtful gifts at Maybee Pop & Joy in Ulaanbaatar.",
+    "ctaShop": "Shop Toys",
+    "ctaGifts": "Find a Gift",
+    "featuredCategories": "Featured Categories",
+    "bestSellers": "Best Sellers",
+    "newArrivals": "New Arrivals",
+    "giftFinderTitle": "Not sure what to gift?",
+    "giftFinderSubtitle": "Pick an age and budget, and we'll help you find the right gift together.",
+    "giftFinderCta": "Find a Gift",
+    "shopByAge": "Shop by Age",
+    "shopByBudget": "Shop by Budget",
+    "featuredProducts": "Featured Products",
+    "whyMaybeeTitle": "Why Maybee Pop & Joy?",
+    "storeTitle": "Visit Our Store",
+    "viewAll": "View All"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "quantity": "Quantity",
+    "outOfStock": "Out of Stock",
+    "inStock": "In Stock",
+    "lowStock": "Low Stock",
+    "ageRecommendation": "Recommended Age",
+    "description": "Description",
+    "features": "Features",
+    "whatsIncluded": "What's Included",
+    "safetyInfo": "Safety Information",
+    "delivery": "Delivery",
+    "relatedProducts": "Related Products",
+    "sku": "SKU",
+    "brand": "Brand",
+    "share": "Share",
+    "breadcrumbHome": "Home"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery Fee",
+    "total": "Total",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "continueShopping": "Continue Shopping"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "contactInfo": "Contact Information",
+    "name": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email (optional)",
+    "deliveryMethod": "Delivery Method",
+    "delivery": "Deliver to Address",
+    "pickup": "Store Pickup",
+    "address": "Home Address",
+    "district": "District",
+    "khoroo": "Khoroo",
+    "addressDetails": "Additional Address Details",
+    "orderNotes": "Order Notes",
+    "paymentMethod": "Payment Method",
+    "placeOrder": "Place Order",
+    "orderSummary": "Order Summary"
+  },
+  "order": {
+    "confirmationTitle": "Order Placed Successfully",
+    "orderNumber": "Order Number",
+    "statusPendingPayment": "Payment Pending",
+    "nextSteps": "We'll contact you shortly to confirm your order."
+  },
+  "footer": {
+    "aboutTitle": "Maybee Pop & Joy",
+    "aboutText": "A children's toy and gift store in Ulaanbaatar.",
+    "shop": "Shop",
+    "help": "Help",
+    "delivery": "Delivery Policy",
+    "returns": "Return Policy",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact",
+    "storeLocation": "Store Location",
+    "phone": "Phone",
+    "hours": "Hours",
+    "copyright": "All rights reserved."
+  },
+  "store": {
+    "title": "NEXT Plaza Store",
+    "address": "Address",
+    "hours": "Hours",
+    "phone": "Phone",
+    "directions": "Get Directions",
+    "faqTitle": "Frequently Asked Location Questions"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "formName": "Your Name",
+    "formPhone": "Phone Number",
+    "formMessage": "Message",
+    "formSubmit": "Send",
+    "formSuccess": "Thank you! We'll get back to you shortly."
+  },
+  "search": {
+    "title": "Search Results",
+    "noResults": "No products matched your search.",
+    "resultsFor": "Search term"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "subtitle": "Sorry, we couldn't find that page.",
+    "cta": "Back to Home"
+  }
+}
