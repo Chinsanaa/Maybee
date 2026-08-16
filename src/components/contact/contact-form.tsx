@@ -13,7 +13,7 @@ export function ContactForm() {
 
   if (state?.success) {
     return (
-      <p className="rounded-card bg-green-50 p-6 text-sm font-medium text-green-800">
+      <p className="rounded-card bg-brand-success-bg p-6 text-sm font-medium text-brand-success">
         {t("formSuccess")}
       </p>
     );

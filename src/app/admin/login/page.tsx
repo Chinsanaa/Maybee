@@ -2,6 +2,8 @@
 
 import { useActionState } from "react";
 import { adminLoginAction, type LoginState } from "@/app/actions/admin-auth-actions";
+import { TextField } from "@/components/ui/form-field";
+import { Button } from "@/components/ui/button";
 
 export default function AdminLoginPage() {
   const [state, formAction, pending] = useActionState<LoginState, FormData>(
@@ -16,39 +18,12 @@ export default function AdminLoginPage() {
         <p className="mt-1 text-sm text-brand-gray">Sign in to manage the store.</p>
 
         <form action={formAction} className="mt-6 space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-brand-ink">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              className="mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-brand-ink">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              required
-              minLength={6}
-              className="mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-            />
-          </div>
+          <TextField id="email" name="email" type="email" label="Email" required />
+          <TextField id="password" name="password" type="password" label="Password" required minLength={6} />
           {state?.error && <p className="text-sm font-medium text-brand-red">{state.error}</p>}
-          <button
-            type="submit"
-            disabled={pending}
-            className="w-full rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark disabled:opacity-60"
-          >
+          <Button type="submit" disabled={pending} className="w-full">
             {pending ? "Signing in..." : "Sign in"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

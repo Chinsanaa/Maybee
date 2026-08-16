@@ -49,7 +49,7 @@ export default async function StoreIndexPage() {
           <Link
             key={location.id}
             href={`/store/${location.slug}`}
-            className="block rounded-card border border-brand-gray-light bg-white p-6 hover:shadow-md"
+            className="block rounded-card border border-brand-gray-light bg-white p-6 shadow-card transition-shadow hover:shadow-card-hover"
           >
             <h2 className="font-display text-xl font-bold text-brand-ink">
               {localized(location.name_mn, location.name_en, locale)}

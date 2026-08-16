@@ -5,6 +5,8 @@ import { useTranslations } from "next-intl";
 import { submitReviewAction, type ReviewState } from "@/app/actions/review-actions";
 import { Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TextField, TextAreaField } from "@/components/ui/form-field";
+import { Button } from "@/components/ui/button";
 
 export function ReviewForm({ productId }: { productId: string }) {
   const t = useTranslations("product");
@@ -14,7 +16,7 @@ export function ReviewForm({ productId }: { productId: string }) {
 
   if (state?.success) {
     return (
-      <p className="rounded-card bg-green-50 p-4 text-sm font-medium text-green-800">
+      <p className="rounded-card bg-brand-success-bg p-4 text-sm font-medium text-brand-success">
         {t("reviewSubmitted")}
       </p>
     );
@@ -49,42 +51,28 @@ export function ReviewForm({ productId }: { productId: string }) {
         </div>
       </div>
 
-      <div>
-        <label htmlFor="customerName" className="block text-sm font-medium text-brand-ink">
-          {t("yourName")}
-        </label>
-        <input
-          id="customerName"
-          name="customerName"
-          required
-          minLength={2}
-          className="mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-        />
-      </div>
+      <TextField
+        id="customerName"
+        name="customerName"
+        label={t("yourName")}
+        required
+        minLength={2}
+      />
 
-      <div>
-        <label htmlFor="reviewText" className="block text-sm font-medium text-brand-ink">
-          {t("yourReview")}
-        </label>
-        <textarea
-          id="reviewText"
-          name="reviewText"
-          required
-          minLength={5}
-          rows={3}
-          className="mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-        />
-      </div>
+      <TextAreaField
+        id="reviewText"
+        name="reviewText"
+        label={t("yourReview")}
+        required
+        minLength={5}
+        rows={3}
+      />
 
       {state?.error && <p className="text-sm font-medium text-brand-red">{state.error}</p>}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="rounded-full bg-brand-red px-6 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark disabled:opacity-60"
-      >
+      <Button type="submit" disabled={pending}>
         {pending ? "..." : t("submitReview")}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -5,6 +5,7 @@ import { useLocale } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { AGE_BANDS, BUDGET_BANDS, INTEREST_TAGS } from "@/lib/collections";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 type Step = 0 | 1 | 2;
 
@@ -130,23 +131,18 @@ export function GiftFinderWizard() {
           {locale === "en" ? "Back" : "Буцах"}
         </button>
         {step < 2 ? (
-          <button
+          <Button
             type="button"
+            size="sm"
             onClick={() => setStep((s) => (s < 2 ? ((s + 1) as Step) : s))}
             disabled={!current.canNext}
-            className="rounded-full bg-brand-red px-6 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark disabled:cursor-not-allowed disabled:bg-brand-gray-light disabled:text-brand-gray"
           >
             {locale === "en" ? "Next" : "Дараах"}
-          </button>
+          </Button>
         ) : (
-          <button
-            type="button"
-            onClick={submit}
-            data-analytics-event="complete_gift_finder"
-            className="rounded-full bg-brand-red px-6 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark"
-          >
+          <Button type="button" size="sm" onClick={submit} data-analytics-event="complete_gift_finder">
             {locale === "en" ? "Find Gifts" : "Бэлэг олох"}
-          </button>
+          </Button>
         )}
       </div>
     </div>

@@ -20,7 +20,9 @@ const sizes: Record<ButtonSize, string> = {
   md: "px-6 py-3 text-sm",
 };
 
-function variantClass(variant: ButtonVariant, size: ButtonSize) {
+/** Exposed for cases that need the Button visual style on an element other
+ * than <button> or the i18n <Link> — e.g. an external `tel:`/`mailto:` <a>. */
+export function buttonClassName(variant: ButtonVariant = "primary", size: ButtonSize = "md") {
   const isTextOnly = variant === "ghost" || variant === "danger";
   return cn(isTextOnly ? "" : base, isTextOnly ? variants[variant] : cn(variants[variant], sizes[size]));
 }
@@ -31,7 +33,7 @@ export function Button({
   className,
   ...props
 }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant; size?: ButtonSize }) {
-  return <button className={cn(variantClass(variant, size), className)} {...props} />;
+  return <button className={cn(buttonClassName(variant, size), className)} {...props} />;
 }
 
 export function ButtonLink({
@@ -43,7 +45,7 @@ export function ButtonLink({
   ...props
 }: React.ComponentProps<typeof Link> & { variant?: ButtonVariant; size?: ButtonSize }) {
   return (
-    <Link href={href} className={cn(variantClass(variant, size), className)} {...props}>
+    <Link href={href} className={cn(buttonClassName(variant, size), className)} {...props}>
       {children}
     </Link>
   );

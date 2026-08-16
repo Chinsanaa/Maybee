@@ -57,7 +57,7 @@ export default async function AdminReviewsPage({
                   {r.is_approved ? "Approved" : "Pending"}
                 </Badge>
               </div>
-              <span className="text-xs text-brand-gray">{new Date(r.created_at).toLocaleDateString()}</span>
+              <span className="text-xs text-brand-gray">{new Date(r.created_at).toLocaleDateString("en-US")}</span>
             </div>
             <p className="mt-2 text-sm text-brand-ink">{r.review_text}</p>
             {r.product && (

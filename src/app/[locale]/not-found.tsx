@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { getFeaturedCategories } from "@/lib/catalog";
 import { getLocale } from "next-intl/server";
+import { ButtonLink } from "@/components/ui/button";
 
 function localized(mn: string, en: string, locale: string) {
   return locale === "en" && en ? en : mn;
@@ -20,12 +21,9 @@ export default async function NotFound() {
       <h1 className="font-display mt-4 text-2xl font-extrabold text-brand-ink">{t("title")}</h1>
       <p className="mt-2 text-brand-gray">{t("subtitle")}</p>
 
-      <Link
-        href="/"
-        className="mt-6 inline-block rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark"
-      >
+      <ButtonLink href="/" className="mt-6">
         {t("cta")}
-      </Link>
+      </ButtonLink>
 
       {categories.length > 0 && (
         <div className="mt-10">
