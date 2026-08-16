@@ -1,6 +1,3 @@
-// AUTO-GENERATED from Supabase schema via `mcp__Supabase__generate_typescript_types`.
-// Regenerate after any schema migration — do not hand-edit.
-
 export type Json =
   | string
   | number
@@ -10,6 +7,8 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -39,73 +38,121 @@ export type Database = {
         }
         Relationships: []
       }
+      blog_post: {
+        Row: {
+          author_name: string | null
+          content_en: string
+          content_mn: string
+          cover_image_url: string | null
+          created_at: string
+          excerpt_en: string
+          excerpt_mn: string
+          id: string
+          is_published: boolean
+          published_at: string | null
+          seo_description_en: string
+          seo_description_mn: string
+          seo_title_en: string
+          seo_title_mn: string
+          slug: string
+          title_en: string
+          title_mn: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string | null
+          content_en?: string
+          content_mn?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt_en?: string
+          excerpt_mn?: string
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          seo_description_en?: string
+          seo_description_mn?: string
+          seo_title_en?: string
+          seo_title_mn?: string
+          slug: string
+          title_en?: string
+          title_mn: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string | null
+          content_en?: string
+          content_mn?: string
+          cover_image_url?: string | null
+          created_at?: string
+          excerpt_en?: string
+          excerpt_mn?: string
+          id?: string
+          is_published?: boolean
+          published_at?: string | null
+          seo_description_en?: string
+          seo_description_mn?: string
+          seo_title_en?: string
+          seo_title_mn?: string
+          slug?: string
+          title_en?: string
+          title_mn?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       business_info: {
         Row: {
-          address: string
-          address_mn: string
-          city: string
+          about_story_en: string
+          about_story_mn: string
           currency_code: string
           currency_symbol: string
           description_en: string
           description_mn: string
-          district: string
           facebook_url: string
-          google_maps_embed_url: string
           google_review_url: string
-          hours: Json
           id: number
           instagram_url: string
-          latitude: number | null
           logo_url: string
-          longitude: number | null
           name: string
           phone: string
+          showcase_enabled: boolean
           tiktok_url: string
           updated_at: string
         }
         Insert: {
-          address?: string
-          address_mn?: string
-          city?: string
+          about_story_en?: string
+          about_story_mn?: string
           currency_code?: string
           currency_symbol?: string
           description_en?: string
           description_mn?: string
-          district?: string
           facebook_url?: string
-          google_maps_embed_url?: string
           google_review_url?: string
-          hours?: Json
           id?: number
           instagram_url?: string
-          latitude?: number | null
           logo_url?: string
-          longitude?: number | null
           name?: string
           phone?: string
+          showcase_enabled?: boolean
           tiktok_url?: string
           updated_at?: string
         }
         Update: {
-          address?: string
-          address_mn?: string
-          city?: string
+          about_story_en?: string
+          about_story_mn?: string
           currency_code?: string
           currency_symbol?: string
           description_en?: string
           description_mn?: string
-          district?: string
           facebook_url?: string
-          google_maps_embed_url?: string
           google_review_url?: string
-          hours?: Json
           id?: number
           instagram_url?: string
-          latitude?: number | null
           logo_url?: string
-          longitude?: number | null
           name?: string
           phone?: string
+          showcase_enabled?: boolean
           tiktok_url?: string
           updated_at?: string
         }
@@ -203,6 +250,45 @@ export type Database = {
           message?: string
           name?: string
           phone?: string
+        }
+        Relationships: []
+      }
+      faq: {
+        Row: {
+          answer_en: string
+          answer_mn: string
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean
+          question_en: string
+          question_mn: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer_en?: string
+          answer_mn: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question_en?: string
+          question_mn: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer_en?: string
+          answer_mn?: string
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          question_en?: string
+          question_mn?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -438,6 +524,47 @@ export type Database = {
           },
         ]
       }
+      product_review: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: string
+          is_approved: boolean
+          photo_url: string | null
+          product_id: string
+          rating: number
+          review_text: string
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          id?: string
+          is_approved?: boolean
+          photo_url?: string | null
+          product_id: string
+          rating: number
+          review_text?: string
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          is_approved?: boolean
+          photo_url?: string | null
+          product_id?: string
+          rating?: number
+          review_text?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_review_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seo_redirect: {
         Row: {
           created_at: string
@@ -462,6 +589,72 @@ export type Database = {
         }
         Relationships: []
       }
+      store_location: {
+        Row: {
+          address: string
+          address_mn: string
+          city: string
+          created_at: string
+          district: string
+          google_maps_embed_url: string
+          hours: Json
+          id: string
+          image_url: string
+          is_active: boolean
+          is_primary: boolean
+          latitude: number | null
+          longitude: number | null
+          name_en: string
+          name_mn: string
+          phone: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          address?: string
+          address_mn?: string
+          city?: string
+          created_at?: string
+          district?: string
+          google_maps_embed_url?: string
+          hours?: Json
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          is_primary?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name_en?: string
+          name_mn: string
+          phone?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          address_mn?: string
+          city?: string
+          created_at?: string
+          district?: string
+          google_maps_embed_url?: string
+          hours?: Json
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          is_primary?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name_en?: string
+          name_mn?: string
+          phone?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -480,13 +673,129 @@ export type Database = {
   }
 }
 
-type DefaultSchema = Database["public"]
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
-export type Tables<T extends keyof DefaultSchema["Tables"]> =
-  DefaultSchema["Tables"][T]["Row"]
-export type TablesInsert<T extends keyof DefaultSchema["Tables"]> =
-  DefaultSchema["Tables"][T]["Insert"]
-export type TablesUpdate<T extends keyof DefaultSchema["Tables"]> =
-  DefaultSchema["Tables"][T]["Update"]
-export type Enums<T extends keyof DefaultSchema["Enums"]> =
-  DefaultSchema["Enums"][T]
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      admin_role: ["OWNER", "STAFF"],
+      product_relation_type: ["RELATED", "RECOMMENDED", "FREQUENTLY_BOUGHT"],
+      stock_status: ["IN_STOCK", "LOW_STOCK", "OUT_OF_STOCK", "PREORDER"],
+    },
+  },
+} as const

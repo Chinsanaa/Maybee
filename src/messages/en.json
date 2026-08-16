@@ -29,10 +29,18 @@
     "featuredProducts": "Featured Products",
     "whyMaybeeTitle": "Why Maybee Pop & Joy?",
     "storeTitle": "Visit Our Store",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "ctaLearnMore": "About Us",
+    "ctaReadBlog": "Read Our Blog",
+    "aboutExcerptTitle": "Our Story",
+    "aboutExcerptCta": "Read our story",
+    "faqTeaserTitle": "Frequently Asked Questions",
+    "faqTeaserCta": "See all FAQs",
+    "blogTeaserTitle": "From the Blog",
+    "blogTeaserCta": "Visit our blog"
   },
   "product": {
-    "callToOrder": "Call to Order",
+    "callToInquire": "Call with Questions",
     "quantity": "Quantity",
     "outOfStock": "Out of Stock",
     "inStock": "In Stock",
@@ -46,7 +54,16 @@
     "sku": "SKU",
     "brand": "Brand",
     "share": "Share",
-    "breadcrumbHome": "Home"
+    "breadcrumbHome": "Home",
+    "reviews": "Reviews",
+    "noReviews": "No reviews yet. Be the first!",
+    "writeReview": "Write a Review",
+    "reviewSubmitted": "Thank you! Your review will be published after moderation.",
+    "yourRating": "Your rating",
+    "yourName": "Your name",
+    "yourReview": "Your review",
+    "submitReview": "Submit",
+    "recentlyViewed": "Recently Viewed"
   },
   "footer": {
     "aboutTitle": "Maybee Pop & Joy",
@@ -60,10 +77,27 @@
     "storeLocation": "Store Location",
     "phone": "Phone",
     "hours": "Hours",
-    "copyright": "All rights reserved."
+    "copyright": "All rights reserved.",
+    "blog": "Blog",
+    "faq": "FAQ",
+    "about": "About Us",
+    "explore": "Explore"
+  },
+  "about": {
+    "title": "About Us",
+    "breadcrumb": "About"
+  },
+  "blog": {
+    "title": "Blog",
+    "noPosts": "No posts yet — check back soon.",
+    "backToBlog": "Back to Blog"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "noResults": "No FAQ entries yet."
   },
   "store": {
-    "title": "NEXT Plaza Store",
+    "title": "Store Locations",
     "address": "Address",
     "hours": "Hours",
     "phone": "Phone",
@@ -86,6 +120,12 @@
   "notFound": {
     "title": "Page Not Found",
     "subtitle": "Sorry, we couldn't find that page.",
+    "cta": "Back to Home"
+  },
+  "error": {
+    "title": "Something Went Wrong",
+    "subtitle": "Sorry, an unexpected error occurred. Please try again.",
+    "retry": "Try Again",
     "cta": "Back to Home"
   }
 }

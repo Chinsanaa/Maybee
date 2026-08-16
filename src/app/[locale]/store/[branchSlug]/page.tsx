@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { getBusinessInfo, formatHoursSummary } from "@/lib/business-info";
+import { getBusinessInfo, getStoreLocationBySlug, getStoreLocations, formatHoursSummary } from "@/lib/business-info";
 import { localBusinessJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/shop/breadcrumbs";
 import { MapPin, Phone, Clock } from "lucide-react";
@@ -11,58 +12,80 @@ const DAY_LABELS_MN: Record<string, string> = {
 const DAY_LABELS_EN: Record<string, string> = {
   mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday",
 };
-const DAY_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+const DAY_ORDER = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
 
-export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale();
-  const business = await getBusinessInfo();
+function localized(mn: string, en: string, locale: string) {
+  return locale === "en" && en ? en : mn;
+}
+
+export async function generateStaticParams() {
+  const locations = await getStoreLocations();
+  return locations.map((l) => ({ branchSlug: l.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ branchSlug: string; locale: string }>;
+}): Promise<Metadata> {
+  const { branchSlug, locale } = await params;
+  const [business, location] = await Promise.all([
+    getBusinessInfo(),
+    getStoreLocationBySlug(branchSlug),
+  ]);
+  if (!location) return {};
+
+  const name = localized(location.name_mn, location.name_en, locale);
   return {
-    title:
-      locale === "en"
-        ? `${business.name} — NEXT Plaza Store, Ulaanbaatar`
-        : `${business.name} — NEXT Plaza дэлгүүр, Улаанбаатар`,
+    title: `${business.name} — ${name}`,
     description:
       locale === "en"
-        ? `Visit ${business.name} at NEXT Plaza, Ard Ayush Avenue, Bayangol District, Ulaanbaatar. Opening hours, phone, and directions.`
-        : `${business.name} дэлгүүр NEXT Plaza, Ард Аюуш өргөн чөлөө, Баянгол дүүрэгт байрладаг. Ажиллах цаг, утас, чиглэл.`,
-    alternates: { canonical: `/${locale}/store/next-plaza` },
+        ? `Visit ${business.name} at ${location.address}. Opening hours, phone, and directions.`
+        : `${business.name} дэлгүүр ${location.address_mn || location.address}-т байрладаг. Ажиллах цаг, утас, чиглэл.`,
+    alternates: { canonical: `/${locale}/store/${branchSlug}` },
   };
 }
 
-export default async function StorePage() {
-  const [locale, t, business] = await Promise.all([
+export default async function StoreBranchPage({
+  params,
+}: {
+  params: Promise<{ branchSlug: string }>;
+}) {
+  const { branchSlug } = await params;
+  const [locale, t, business, location] = await Promise.all([
     getLocale(),
     getTranslations("store"),
     getBusinessInfo(),
+    getStoreLocationBySlug(branchSlug),
   ]);
 
+  if (!location) notFound();
+
+  const name = localized(location.name_mn, location.name_en, locale);
+  const address = localized(location.address_mn, location.address, locale) || location.address;
   const dayLabels = locale === "en" ? DAY_LABELS_EN : DAY_LABELS_MN;
-  const mapsDirectionsUrl = business.latitude && business.longitude
-    ? `https://www.google.com/maps/dir/?api=1&destination=${business.latitude},${business.longitude}`
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(business.address)}`;
+  const mapsDirectionsUrl = location.latitude && location.longitude
+    ? `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+
+  const phone = location.phone || business.phone;
 
   const faqs =
     locale === "en"
       ? [
-          {
-            q: "Where is Maybee Pop & Joy located?",
-            a: `${business.address}.`,
-          },
-          {
-            q: "What are the store's opening hours?",
-            a: formatHoursSummary(business.hours, locale),
-          },
+          { q: `Where is ${name} located?`, a: `${address}.` },
+          { q: "What are the store's opening hours?", a: formatHoursSummary(location.hours, locale) },
           {
             q: "Can I call the store before visiting?",
-            a: business.phone ? `Yes, call ${business.phone}.` : "Contact details are available on our Contact page.",
+            a: phone ? `Yes, call ${phone}.` : "Contact details are available on our Contact page.",
           },
         ]
       : [
-          { q: "Maybee Pop & Joy хаана байрладаг вэ?", a: `${business.address}.` },
-          { q: "Дэлгүүрийн ажиллах цаг хэд вэ?", a: formatHoursSummary(business.hours, locale) },
+          { q: `${name} хаана байрладаг вэ?`, a: `${address}.` },
+          { q: "Дэлгүүрийн ажиллах цаг хэд вэ?", a: formatHoursSummary(location.hours, locale) },
           {
             q: "Очихын өмнө утсаар холбогдож болох уу?",
-            a: business.phone ? `Тийм ээ, ${business.phone} дугаараар холбогдоно уу.` : "Холбоо барих мэдээллийг Contact хуудаснаас харна уу.",
+            a: phone ? `Тийм ээ, ${phone} дугаараар холбогдоно уу.` : "Холбоо барих мэдээллийг Contact хуудаснаас харна уу.",
           },
         ];
 
@@ -70,13 +93,13 @@ export default async function StorePage() {
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: JSON.stringify([
-            localBusinessJsonLd(business),
+            localBusinessJsonLd(location, business, locale),
             breadcrumbJsonLd([
               { name: locale === "en" ? "Home" : "Нүүр", url: `/${locale}` },
-              { name: t("title"), url: `/${locale}/store/next-plaza` },
+              { name: t("title"), url: `/${locale}/store` },
+              { name, url: `/${locale}/store/${branchSlug}` },
             ]),
           ]),
         }}
@@ -85,11 +108,12 @@ export default async function StorePage() {
         locale={locale}
         items={[
           { name: locale === "en" ? "Home" : "Нүүр", href: "/" },
-          { name: t("title"), href: "/store/next-plaza" },
+          { name: t("title"), href: "/store" },
+          { name, href: `/store/${branchSlug}` },
         ]}
       />
 
-      <h1 className="font-display text-3xl font-extrabold text-brand-ink">{t("title")}</h1>
+      <h1 className="font-display text-3xl font-extrabold text-brand-ink">{name}</h1>
 
       <div className="mt-8 grid gap-8 md:grid-cols-2">
         <div className="space-y-4 rounded-card border border-brand-gray-light bg-white p-6">
@@ -97,7 +121,7 @@ export default async function StorePage() {
             <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-red" aria-hidden />
             <span>
               <span className="block font-semibold">{t("address")}</span>
-              {business.address}
+              {address}
             </span>
           </p>
           <p className="flex items-start gap-3 text-brand-ink">
@@ -106,25 +130,26 @@ export default async function StorePage() {
               <span className="block font-semibold">{t("hours")}</span>
               <span className="block text-sm text-brand-gray">
                 {DAY_ORDER.map((d) =>
-                  business.hours[d as keyof typeof business.hours] ? (
+                  location.hours[d] ? (
                     <span key={d} className="block">
-                      {dayLabels[d]}: {business.hours[d as keyof typeof business.hours]!.open}–
-                      {business.hours[d as keyof typeof business.hours]!.close}
+                      {dayLabels[d]}: {location.hours[d]!.open}–{location.hours[d]!.close}
                     </span>
                   ) : null
                 )}
               </span>
             </span>
           </p>
-          <p className="flex items-start gap-3 text-brand-ink">
-            <Phone className="mt-0.5 h-5 w-5 shrink-0 text-brand-red" aria-hidden />
-            <span>
-              <span className="block font-semibold">{t("phone")}</span>
-              <a href={`tel:${business.phone.replace(/\s+/g, "")}`} data-analytics-event="click_phone">
-                {business.phone}
-              </a>
-            </span>
-          </p>
+          {phone && (
+            <p className="flex items-start gap-3 text-brand-ink">
+              <Phone className="mt-0.5 h-5 w-5 shrink-0 text-brand-red" aria-hidden />
+              <span>
+                <span className="block font-semibold">{t("phone")}</span>
+                <a href={`tel:${phone.replace(/\s+/g, "")}`} data-analytics-event="click_phone">
+                  {phone}
+                </a>
+              </span>
+            </p>
+          )}
           <a
             href={mapsDirectionsUrl}
             target="_blank"
@@ -137,10 +162,10 @@ export default async function StorePage() {
         </div>
 
         <div className="overflow-hidden rounded-card border border-brand-gray-light">
-          {business.google_maps_embed_url ? (
+          {location.google_maps_embed_url ? (
             <iframe
-              title="Maybee Pop & Joy — Google Maps"
-              src={business.google_maps_embed_url}
+              title={`${name} — Google Maps`}
+              src={location.google_maps_embed_url}
               className="h-full min-h-64 w-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

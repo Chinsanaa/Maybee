@@ -3,12 +3,19 @@ import { Link } from "@/i18n/navigation";
 import { Phone, MapPin, Clock } from "lucide-react";
 import { InstagramIcon, FacebookIcon } from "@/components/icons/social-icons";
 import type { BusinessInfo } from "@/lib/business-info";
-import { formatHoursSummary } from "@/lib/business-info";
+import { getStoreLocations, formatHoursSummary } from "@/lib/business-info";
 import { getLocale } from "next-intl/server";
 
+function localized(mn: string, en: string, locale: string) {
+  return locale === "en" && en ? en : mn;
+}
+
 export async function SiteFooter({ business }: { business: BusinessInfo }) {
-  const t = await getTranslations("footer");
-  const locale = await getLocale();
+  const [t, locale, locations] = await Promise.all([
+    getTranslations("footer"),
+    getLocale(),
+    getStoreLocations(),
+  ]);
 
   return (
     <footer className="mt-16 border-t border-brand-gray-light bg-white">
@@ -47,17 +54,32 @@ export async function SiteFooter({ business }: { business: BusinessInfo }) {
         </div>
 
         <div>
-          <p className="text-sm font-semibold text-brand-ink">{t("shop")}</p>
+          <p className="text-sm font-semibold text-brand-ink">
+            {business.showcase_enabled ? t("shop") : t("explore")}
+          </p>
           <ul className="mt-3 space-y-2 text-sm text-brand-gray">
-            <li><Link href="/shop" className="hover:text-brand-red">{t("shop")}</Link></li>
-            <li><Link href="/shop?filter=new" className="hover:text-brand-red">New</Link></li>
-            <li><Link href="/shop?filter=bestseller" className="hover:text-brand-red">Best Sellers</Link></li>
+            {business.showcase_enabled ? (
+              <>
+                <li><Link href="/shop" className="hover:text-brand-red">{t("shop")}</Link></li>
+                <li><Link href="/shop?filter=new" className="hover:text-brand-red">New</Link></li>
+                <li><Link href="/shop?filter=bestseller" className="hover:text-brand-red">Best Sellers</Link></li>
+                <li><Link href="/gift-finder" className="hover:text-brand-red">Gift Finder</Link></li>
+              </>
+            ) : (
+              <>
+                <li><Link href="/about" className="hover:text-brand-red">{t("about")}</Link></li>
+                <li><Link href="/faq" className="hover:text-brand-red">{t("faq")}</Link></li>
+                <li><Link href="/store" className="hover:text-brand-red">{t("storeLocation")}</Link></li>
+              </>
+            )}
           </ul>
         </div>
 
         <div>
           <p className="text-sm font-semibold text-brand-ink">{t("help")}</p>
           <ul className="mt-3 space-y-2 text-sm text-brand-gray">
+            <li><Link href="/blog" className="hover:text-brand-red">{t("blog")}</Link></li>
+            <li><Link href="/faq" className="hover:text-brand-red">{t("faq")}</Link></li>
             <li><Link href="/policies/returns" className="hover:text-brand-red">{t("returns")}</Link></li>
             <li><Link href="/contact" className="hover:text-brand-red">{t("contact")}</Link></li>
             <li><Link href="/policies/privacy" className="hover:text-brand-red">{t("privacy")}</Link></li>
@@ -67,13 +89,20 @@ export async function SiteFooter({ business }: { business: BusinessInfo }) {
 
         <div>
           <p className="text-sm font-semibold text-brand-ink">{t("storeLocation")}</p>
-          <ul className="mt-3 space-y-2 text-sm text-brand-gray">
-            <li className="flex items-start gap-2">
-              <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <Link href="/store/next-plaza" className="hover:text-brand-red">
-                {business.address}
-              </Link>
-            </li>
+          <ul className="mt-3 space-y-3 text-sm text-brand-gray">
+            {locations.map((location) => (
+              <li key={location.id}>
+                <Link href={`/store/${location.slug}`} className="flex items-start gap-2 hover:text-brand-red">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                  <span>
+                    <span className="block font-medium text-brand-ink">
+                      {localized(location.name_mn, location.name_en, locale)}
+                    </span>
+                    {localized(location.address_mn, location.address, locale) || location.address}
+                  </span>
+                </Link>
+              </li>
+            ))}
             <li className="flex items-start gap-2">
               <Phone className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
               <a
@@ -84,10 +113,12 @@ export async function SiteFooter({ business }: { business: BusinessInfo }) {
                 {business.phone}
               </a>
             </li>
-            <li className="flex items-start gap-2">
-              <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-              <span>{formatHoursSummary(business.hours, locale)}</span>
-            </li>
+            {locations[0] && (
+              <li className="flex items-start gap-2">
+                <Clock className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+                <span>{formatHoursSummary(locations[0].hours, locale)}</span>
+              </li>
+            )}
           </ul>
         </div>
       </div>

@@ -51,6 +51,7 @@ export type ProductFilters = {
   brand?: string;
   onSale?: boolean;
   inStockOnly?: boolean;
+  interestTags?: string[];
   filter?: "new" | "bestseller" | "featured";
   sort?: "relevance" | "newest" | "price_asc" | "price_desc" | "bestselling";
   page?: number;
@@ -72,6 +73,9 @@ export async function listProducts(filters: ProductFilters = {}) {
   if (filters.brand) query = query.eq("brand", filters.brand);
   if (filters.onSale) query = query.eq("is_on_sale", true);
   if (filters.inStockOnly) query = query.neq("stock_status", "OUT_OF_STOCK");
+  if (filters.interestTags && filters.interestTags.length > 0) {
+    query = query.overlaps("tags", filters.interestTags);
+  }
   if (filters.ageMonths !== undefined) {
     query = query
       .lte("age_min_months", filters.ageMonths)
@@ -160,6 +164,17 @@ export async function searchProducts(q: string, limit = 24) {
       `name_mn.ilike.%${q}%,name_en.ilike.%${q}%,brand.ilike.%${q}%,sku.ilike.%${q}%`
     )
     .limit(limit);
+  return (data ?? []) as unknown as ProductWithImages[];
+}
+
+export async function getProductsBySlugs(slugs: string[]): Promise<ProductWithImages[]> {
+  if (slugs.length === 0) return [];
+  const supabase = createPublicClient();
+  const { data } = await supabase
+    .from("product")
+    .select(PRODUCT_SELECT)
+    .or(slugs.map((s) => `slug_mn.eq.${s},slug_en.eq.${s}`).join(","))
+    .eq("is_published", true);
   return (data ?? []) as unknown as ProductWithImages[];
 }
 

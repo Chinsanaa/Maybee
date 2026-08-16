@@ -29,10 +29,18 @@
     "featuredProducts": "Онцлох бүтээгдэхүүн",
     "whyMaybeeTitle": "Яагаад Maybee Pop & Joy вэ?",
     "storeTitle": "Манай дэлгүүрт зочилно уу",
-    "viewAll": "Бүгдийг үзэх"
+    "viewAll": "Бүгдийг үзэх",
+    "ctaLearnMore": "Бидний тухай",
+    "ctaReadBlog": "Блог унших",
+    "aboutExcerptTitle": "Бидний тухай",
+    "aboutExcerptCta": "Дэлгэрэнгүй унших",
+    "faqTeaserTitle": "Түгээмэл асуултууд",
+    "faqTeaserCta": "Бүх асуултыг үзэх",
+    "blogTeaserTitle": "Блогоос",
+    "blogTeaserCta": "Блог руу очих"
   },
   "product": {
-    "callToOrder": "Утсаар захиалах",
+    "callToInquire": "Асуулт байвал холбогдох",
     "quantity": "Тоо ширхэг",
     "outOfStock": "Дууссан",
     "inStock": "Байгаа",
@@ -46,7 +54,16 @@
     "sku": "Барааны код",
     "brand": "Брэнд",
     "share": "Хуваалцах",
-    "breadcrumbHome": "Нүүр"
+    "breadcrumbHome": "Нүүр",
+    "reviews": "Сэтгэгдэл",
+    "noReviews": "Одоогоор сэтгэгдэл алга. Эхнийх нь та байгаарай!",
+    "writeReview": "Сэтгэгдэл бичих",
+    "reviewSubmitted": "Баярлалаа! Таны сэтгэгдлийг хянасны дараа нийтэлнэ.",
+    "yourRating": "Таны үнэлгээ",
+    "yourName": "Таны нэр",
+    "yourReview": "Сэтгэгдэл",
+    "submitReview": "Илгээх",
+    "recentlyViewed": "Саяхан үзсэн"
   },
   "footer": {
     "aboutTitle": "Maybee Pop & Joy",
@@ -60,10 +77,27 @@
     "storeLocation": "Дэлгүүрийн байршил",
     "phone": "Утас",
     "hours": "Ажиллах цаг",
-    "copyright": "Бүх эрх хуулиар хамгаалагдсан."
+    "copyright": "Бүх эрх хуулиар хамгаалагдсан.",
+    "blog": "Блог",
+    "faq": "Асуулт хариулт",
+    "about": "Бидний тухай",
+    "explore": "Судлах"
+  },
+  "about": {
+    "title": "Бидний тухай",
+    "breadcrumb": "Бидний тухай"
+  },
+  "blog": {
+    "title": "Блог",
+    "noPosts": "Одоогоор нийтлэл алга — удахгүй нэмэгдэнэ.",
+    "backToBlog": "Блог руу буцах"
+  },
+  "faq": {
+    "title": "Түгээмэл асуултууд",
+    "noResults": "Одоогоор асуулт алга байна."
   },
   "store": {
-    "title": "NEXT Plaza дэлгүүр",
+    "title": "Дэлгүүрийн байршил",
     "address": "Хаяг",
     "hours": "Ажиллах цаг",
     "phone": "Утас",
@@ -86,6 +120,12 @@
   "notFound": {
     "title": "Хуудас олдсонгүй",
     "subtitle": "Уучлаарай, таны хайсан хуудас олдсонгүй.",
+    "cta": "Нүүр хуудас руу буцах"
+  },
+  "error": {
+    "title": "Алдаа гарлаа",
+    "subtitle": "Уучлаарай, тодорхойгүй алдаа гарлаа. Дахин оролдоно уу.",
+    "retry": "Дахин оролдох",
     "cta": "Нүүр хуудас руу буцах"
   }
 }

@@ -16,11 +16,28 @@
   --color-brand-gray-light: #e9e5e1;
   --color-brand-honey: #ffc93c;
 
+  /* Semantic status pair — status/badge use only (approved/pending, etc.),
+     never decorative. Not part of the brand palette. */
+  --color-brand-success: #2f7d4f;
+  --color-brand-success-bg: #e8f5ec;
+  --color-brand-warning: #a16a00;
+  --color-brand-warning-bg: #fff4d9;
+
   --background: var(--color-brand-cream);
   --foreground: var(--color-brand-ink);
 
   --radius-card: 0.875rem;
   --radius-pill: 999px;
+
+  /* Elevation */
+  --shadow-card: 0 1px 2px rgba(23, 23, 23, 0.04), 0 4px 12px rgba(23, 23, 23, 0.06);
+  --shadow-card-hover: 0 2px 4px rgba(23, 23, 23, 0.06), 0 12px 24px rgba(23, 23, 23, 0.1);
+  --shadow-popover: 0 8px 24px rgba(23, 23, 23, 0.12);
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
 }
 
 @theme inline {
@@ -36,12 +53,24 @@
   --color-brand-gray: var(--color-brand-gray);
   --color-brand-gray-light: var(--color-brand-gray-light);
   --color-brand-honey: var(--color-brand-honey);
+  --color-brand-success: var(--color-brand-success);
+  --color-brand-success-bg: var(--color-brand-success-bg);
+  --color-brand-warning: var(--color-brand-warning);
+  --color-brand-warning-bg: var(--color-brand-warning-bg);
 
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
 
   --radius-card: var(--radius-card);
   --radius-pill: var(--radius-pill);
+
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-popover: var(--shadow-popover);
+
+  --ease-standard: var(--ease-standard);
+  --duration-fast: var(--duration-fast);
+  --duration-base: var(--duration-base);
 }
 
 body {

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -40,14 +40,20 @@ export async function generateMetadata({
       siteName: business.name,
       locale: locale === "mn" ? "mn_MN" : "en_US",
       type: "website",
+      images: [{ url: business.logo_url || "/brand/maybee-logo.jpg" }],
     },
     twitter: {
       card: "summary_large_image",
       title: business.name,
       description: locale === "en" ? business.description_en : business.description_mn,
+      images: [business.logo_url || "/brand/maybee-logo.jpg"],
     },
     icons: { icon: "/favicon.ico" },
   };
+}
+
+export function generateViewport(): Viewport {
+  return { themeColor: "#f40009" };
 }
 
 export default async function LocaleLayout({
@@ -70,7 +76,6 @@ export default async function LocaleLayout({
       <body className="flex min-h-screen flex-col antialiased">
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([
               organizationJsonLd(business),

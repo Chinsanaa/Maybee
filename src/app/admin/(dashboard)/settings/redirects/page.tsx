@@ -1,5 +1,7 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createRedirectAction, deleteRedirectAction } from "@/app/actions/admin-seo-actions";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 export default async function AdminRedirectsPage() {
   const supabase = await createServerSupabaseClient();
@@ -15,7 +17,7 @@ export default async function AdminRedirectsPage() {
         Use this when a product or category URL changes or is discontinued, so old links (and Google) get sent to the right place instead of a 404.
       </p>
 
-      <div className="mt-6 rounded-card border border-brand-gray-light bg-white p-6">
+      <Card className="mt-6">
         <form action={createRedirectAction} className="flex flex-wrap items-end gap-3">
           <label className="text-sm">
             From path
@@ -23,7 +25,7 @@ export default async function AdminRedirectsPage() {
               name="from_path"
               placeholder="/mn/product/old-slug"
               required
-              className="mt-1 block w-64 rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
+              className="mt-1 block w-64 rounded-card border border-brand-gray-light px-3 py-2 text-sm"
             />
           </label>
           <label className="text-sm">
@@ -32,23 +34,23 @@ export default async function AdminRedirectsPage() {
               name="to_path"
               placeholder="/mn/product/new-slug"
               required
-              className="mt-1 block w-64 rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
+              className="mt-1 block w-64 rounded-card border border-brand-gray-light px-3 py-2 text-sm"
             />
           </label>
           <label className="text-sm">
             Status
-            <select name="status_code" defaultValue={301} className="mt-1 block rounded-lg border border-brand-gray-light px-3 py-2 text-sm">
+            <select name="status_code" defaultValue={301} className="mt-1 block rounded-card border border-brand-gray-light px-3 py-2 text-sm">
               <option value={301}>301 (permanent)</option>
               <option value={302}>302 (temporary)</option>
             </select>
           </label>
-          <button type="submit" className="rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark">
+          <Button type="submit" size="sm">
             Add redirect
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
 
-      <div className="mt-6 overflow-x-auto rounded-card border border-brand-gray-light bg-white">
+      <Card padding="p-4" className="mt-6 overflow-x-auto !p-0">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-brand-gray-light bg-brand-cream text-xs uppercase text-brand-gray">
             <tr>
@@ -83,7 +85,7 @@ export default async function AdminRedirectsPage() {
             )}
           </tbody>
         </table>
-      </div>
+      </Card>
     </div>
   );
 }

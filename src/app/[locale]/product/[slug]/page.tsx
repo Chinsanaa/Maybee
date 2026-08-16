@@ -2,14 +2,20 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { getProductBySlug, getRelatedProducts } from "@/lib/catalog";
-import { getBusinessInfo } from "@/lib/business-info";
+import { getBusinessInfo, getStoreLocations } from "@/lib/business-info";
 import { formatPrice, discountPercent } from "@/lib/currency";
 import { productJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/shop/breadcrumbs";
+import { Link } from "@/i18n/navigation";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductCta } from "@/components/product/product-cta";
 import { ShareButtons } from "@/components/product/share-buttons";
 import { ProductCard } from "@/components/product/product-card";
+import { ReviewForm } from "@/components/product/review-form";
+import { StarRating } from "@/components/product/star-rating";
+import { getApprovedReviews, getReviewStats } from "@/lib/reviews";
+import { TrackRecentlyViewed } from "@/components/product/track-recently-viewed";
+import { RecentlyViewedRail } from "@/components/product/recently-viewed-rail";
 import { Store, ShieldCheck } from "lucide-react";
 
 function localized(mn: string, en: string, locale: string) {
@@ -47,16 +53,21 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [locale, t, business, product] = await Promise.all([
+  const [locale, t, business, locations, product] = await Promise.all([
     getLocale(),
     getTranslations("product"),
     getBusinessInfo(),
+    getStoreLocations(),
     getProductBySlug(slug),
   ]);
 
   if (!product) notFound();
 
-  const related = await getRelatedProducts(product.id);
+  const [related, reviews, reviewStats] = await Promise.all([
+    getRelatedProducts(product.id),
+    getApprovedReviews(product.id),
+    getReviewStats(product.id),
+  ]);
 
   const name = localized(product.name_mn, product.name_en, locale);
   const shortDesc = localized(product.short_desc_mn, product.short_desc_en, locale);
@@ -89,10 +100,9 @@ export default async function ProductPage({
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{
           __html: JSON.stringify([
-            productJsonLd(product, locale, business),
+            productJsonLd(product, locale, business, reviewStats),
             breadcrumbJsonLd([
               { name: locale === "en" ? "Home" : "Нүүр", url: `/${locale}` },
               { name: locale === "en" ? "Shop" : "Дэлгүүр", url: `/${locale}/shop` },
@@ -104,6 +114,8 @@ export default async function ProductPage({
           ]),
         }}
       />
+
+      <TrackRecentlyViewed slug={slug} />
 
       <Breadcrumbs
         locale={locale}
@@ -130,6 +142,15 @@ export default async function ProductPage({
             </span>
           )}
           <h1 className="font-display text-2xl font-extrabold text-brand-ink md:text-3xl">{name}</h1>
+
+          {reviewStats && (
+            <a href="#reviews" className="mt-1 flex items-center gap-2 text-sm">
+              <StarRating value={reviewStats.average} />
+              <span className="text-brand-gray">
+                {reviewStats.average} ({reviewStats.count} {t("reviews")})
+              </span>
+            </a>
+          )}
 
           <div className="mt-3 flex items-center gap-3">
             <span className="text-2xl font-bold text-brand-ink">
@@ -182,10 +203,20 @@ export default async function ProductPage({
           </div>
 
           <div className="mt-6 space-y-2 rounded-card border border-brand-gray-light p-4 text-sm">
-            {product.available_for_pickup && (
-              <p className="flex items-center gap-2 text-brand-ink">
-                <Store className="h-4 w-4 text-brand-red" aria-hidden />
-                {locale === "en" ? "Available in store at NEXT Plaza" : "NEXT Plaza дэлгүүрт бэлэн байна"}
+            {product.available_for_pickup && locations.length > 0 && (
+              <p className="flex items-start gap-2 text-brand-ink">
+                <Store className="mt-0.5 h-4 w-4 shrink-0 text-brand-red" aria-hidden />
+                <span>
+                  {locale === "en" ? "Available in store: " : "Дэлгүүрт бэлэн байна: "}
+                  {locations.map((loc, i) => (
+                    <span key={loc.id}>
+                      {i > 0 && ", "}
+                      <Link href={`/store/${loc.slug}`} className="underline hover:text-brand-red">
+                        {locale === "en" && loc.name_en ? loc.name_en : loc.name_mn}
+                      </Link>
+                    </span>
+                  ))}
+                </span>
               </p>
             )}
             {safetyInfo && (
@@ -231,6 +262,36 @@ export default async function ProductPage({
         </div>
       )}
 
+      <section id="reviews" className="mt-16 grid gap-10 md:grid-cols-2">
+        <div>
+          <h2 className="font-display text-xl font-bold text-brand-ink">{t("reviews")}</h2>
+          {reviews.length === 0 ? (
+            <p className="mt-3 text-sm text-brand-gray">{t("noReviews")}</p>
+          ) : (
+            <ul className="mt-4 space-y-4">
+              {reviews.map((r) => (
+                <li key={r.id} className="rounded-card border border-brand-gray-light p-4">
+                  <div className="flex items-center justify-between">
+                    <StarRating value={r.rating} />
+                    <span className="text-xs text-brand-gray">
+                      {new Date(r.created_at).toLocaleDateString(locale === "en" ? "en-US" : "mn-MN")}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-sm text-brand-ink">{r.review_text}</p>
+                  <p className="mt-1 text-xs font-medium text-brand-gray">{r.customer_name}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div>
+          <h2 className="font-display text-xl font-bold text-brand-ink">{t("writeReview")}</h2>
+          <div className="mt-4">
+            <ReviewForm productId={product.id} />
+          </div>
+        </div>
+      </section>
+
       {related.length > 0 && (
         <section className="mt-16">
           <h2 className="font-display text-2xl font-bold text-brand-ink">{t("relatedProducts")}</h2>
@@ -241,6 +302,14 @@ export default async function ProductPage({
           </div>
         </section>
       )}
+
+      <RecentlyViewedRail
+        excludeSlug={slug}
+        locale={locale}
+        currencySymbol={business.currency_symbol}
+        title={t("recentlyViewed")}
+        outOfStockLabel={t("outOfStock")}
+      />
     </div>
   );
 }

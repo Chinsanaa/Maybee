@@ -4,6 +4,9 @@ import {
   updateCategoryAction,
   deleteCategoryAction,
 } from "@/app/actions/admin-category-actions";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/form-field";
 
 export default async function AdminCategoriesPage() {
   const supabase = await createServerSupabaseClient();
@@ -19,26 +22,13 @@ export default async function AdminCategoriesPage() {
       <h1 className="font-display text-2xl font-extrabold text-brand-ink">Categories</h1>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
-        <div className="rounded-card border border-brand-gray-light bg-white p-6">
+        <Card>
           <h2 className="font-semibold text-brand-ink">Add category</h2>
           <form action={createCategoryAction} className="mt-4 space-y-3">
-            <input
-              name="name_mn"
-              placeholder="Name (MN)"
-              required
-              className="w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-            />
-            <input
-              name="name_en"
-              placeholder="Name (EN)"
-              className="w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-            />
-            <input
-              name="slug"
-              placeholder="Slug (auto from name if blank)"
-              className="w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-            />
-            <select name="parent_id" className="w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm">
+            <TextField name="name_mn" placeholder="Name (MN)" required />
+            <TextField name="name_en" placeholder="Name (EN)" />
+            <TextField name="slug" placeholder="Slug (auto from name if blank)" />
+            <select name="parent_id" className="w-full rounded-card border border-brand-gray-light px-3 py-2 text-sm">
               <option value="">Top-level category</option>
               {topLevel.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -46,64 +36,55 @@ export default async function AdminCategoriesPage() {
                 </option>
               ))}
             </select>
-            <input
-              type="number"
-              name="sort_order"
-              placeholder="Sort order"
-              defaultValue={0}
-              className="w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm"
-            />
-            <button
-              type="submit"
-              className="rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark"
-            >
+            <TextField type="number" name="sort_order" placeholder="Sort order" defaultValue={0} />
+            <Button type="submit" size="sm">
               Add
-            </button>
+            </Button>
           </form>
-        </div>
+        </Card>
 
-        <div className="rounded-card border border-brand-gray-light bg-white p-6">
+        <Card>
           <h2 className="font-semibold text-brand-ink">All categories</h2>
           <ul className="mt-4 space-y-3">
             {(categories ?? []).map((c) => (
-              <li key={c.id} className="rounded-lg border border-brand-gray-light p-3">
+              <li key={c.id} className="rounded-card border border-brand-gray-light p-3">
                 <form action={updateCategoryAction} className="flex flex-wrap items-center gap-2">
                   <input type="hidden" name="id" value={c.id} />
                   {c.parent_id && <span className="text-xs text-brand-gray">↳</span>}
                   <input
                     name="name_mn"
                     defaultValue={c.name_mn}
-                    className="w-40 rounded-lg border border-brand-gray-light px-2 py-1 text-sm"
+                    className="w-40 rounded-card border border-brand-gray-light px-2 py-1 text-sm"
                   />
                   <input
                     name="name_en"
                     defaultValue={c.name_en}
-                    className="w-40 rounded-lg border border-brand-gray-light px-2 py-1 text-sm"
+                    className="w-40 rounded-card border border-brand-gray-light px-2 py-1 text-sm"
                   />
                   <input
                     type="number"
                     name="sort_order"
                     defaultValue={c.sort_order}
-                    className="w-16 rounded-lg border border-brand-gray-light px-2 py-1 text-sm"
+                    className="w-16 rounded-card border border-brand-gray-light px-2 py-1 text-sm"
                   />
                   <label className="flex items-center gap-1 text-xs">
                     <input type="checkbox" name="is_active" defaultChecked={c.is_active} />
                     Active
                   </label>
-                  <button type="submit" className="text-xs font-medium text-brand-red hover:underline">
+                  <Button type="submit" variant="ghost" size="sm">
                     Save
-                  </button>
+                  </Button>
                 </form>
                 <form action={deleteCategoryAction} className="mt-1">
                   <input type="hidden" name="id" value={c.id} />
-                  <button type="submit" className="text-xs text-brand-gray hover:underline">
+                  <Button type="submit" variant="danger" size="sm" className="!text-brand-gray">
                     Delete
-                  </button>
+                  </Button>
                 </form>
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
       </div>
     </div>
   );

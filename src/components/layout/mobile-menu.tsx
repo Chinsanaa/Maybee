@@ -5,7 +5,7 @@ import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
-export function MobileMenu() {
+export function MobileMenu({ showcaseEnabled }: { showcaseEnabled: boolean }) {
   const [open, setOpen] = useState(false);
   const t = useTranslations("nav");
 
@@ -26,16 +26,26 @@ export function MobileMenu() {
           id="mobile-menu"
           className="absolute inset-x-0 top-full z-40 flex flex-col gap-1 border-t border-brand-gray-light bg-white p-4 shadow-lg"
         >
-          <Link href="/shop" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
-            {t("shop")}
+          {showcaseEnabled && (
+            <>
+              <Link href="/shop" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+                {t("shop")}
+              </Link>
+              <Link href="/shop?filter=new" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+                {t("newArrivals")}
+              </Link>
+              <Link href="/shop?filter=bestseller" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+                {t("bestSellers")}
+              </Link>
+              <Link href="/gift-finder" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+                Gift Finder
+              </Link>
+            </>
+          )}
+          <Link href="/about" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+            {t("about")}
           </Link>
-          <Link href="/shop?filter=new" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
-            {t("newArrivals")}
-          </Link>
-          <Link href="/shop?filter=bestseller" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
-            {t("bestSellers")}
-          </Link>
-          <Link href="/store/next-plaza" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
+          <Link href="/store" onClick={() => setOpen(false)} className="rounded-lg px-3 py-2.5 text-base font-medium hover:bg-brand-cream">
             {t("store")}
           </Link>
         </nav>

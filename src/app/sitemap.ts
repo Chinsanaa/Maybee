@@ -1,13 +1,20 @@
 import type { MetadataRoute } from "next";
 import { getAllCategories, listProducts } from "@/lib/catalog";
+import { getStoreLocations } from "@/lib/business-info";
+import { getPublishedPosts } from "@/lib/blog";
+import { AGE_BANDS, BUDGET_BANDS } from "@/lib/collections";
 import { routing } from "@/i18n/routing";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const STATIC_PATHS = [
   "",
+  "/about",
   "/shop",
-  "/store/next-plaza",
+  "/store",
+  "/gift-finder",
+  "/blog",
+  "/faq",
   "/contact",
   "/policies/returns",
   "/policies/privacy",
@@ -15,9 +22,11 @@ const STATIC_PATHS = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, { products }] = await Promise.all([
+  const [categories, { products }, locations, posts] = await Promise.all([
     getAllCategories(),
     listProducts({ pageSize: 1000 }),
+    getStoreLocations(),
+    getPublishedPosts(),
   ]);
 
   const entries: MetadataRoute.Sitemap = [];
@@ -29,6 +38,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency: path === "" ? "daily" : "weekly",
         priority: path === "" ? 1 : 0.6,
       });
+    }
+    for (const location of locations) {
+      entries.push({
+        url: `${siteUrl}/${locale}/store/${location.slug}`,
+        lastModified: location.updated_at,
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
+    }
+    for (const band of AGE_BANDS) {
+      entries.push({ url: `${siteUrl}/${locale}/gifts/age/${band.slug}`, changeFrequency: "weekly", priority: 0.6 });
+    }
+    for (const band of BUDGET_BANDS) {
+      entries.push({ url: `${siteUrl}/${locale}/gifts/budget/${band.slug}`, changeFrequency: "weekly", priority: 0.6 });
     }
     for (const category of categories) {
       const slug = locale === "en" && category.slug_en ? category.slug_en : category.slug_mn;
@@ -46,6 +69,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: product.updated_at,
         changeFrequency: "weekly",
         priority: 0.8,
+      });
+    }
+    for (const post of posts) {
+      entries.push({
+        url: `${siteUrl}/${locale}/blog/${post.slug}`,
+        lastModified: post.updated_at,
+        changeFrequency: "monthly",
+        priority: 0.5,
       });
     }
   }
