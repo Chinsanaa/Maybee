@@ -4,8 +4,13 @@ import {
   updateBlogPostAction,
   deleteBlogPostAction,
 } from "@/app/actions/admin-blog-actions";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Newspaper } from "lucide-react";
 
-const inputCls = "mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm";
+const inputCls = "mt-1 w-full rounded-card border border-brand-gray-light px-3 py-2 text-sm";
 const textareaCls = `${inputCls} min-h-24`;
 
 export default async function AdminBlogPage() {
@@ -20,7 +25,7 @@ export default async function AdminBlogPage() {
       <h1 className="font-display text-2xl font-extrabold text-brand-ink">Blog</h1>
       <p className="mt-1 text-sm text-brand-gray">Write guides and gift ideas. Posts are hidden from the storefront until published.</p>
 
-      <div className="mt-6 rounded-card border border-brand-gray-light bg-white p-6">
+      <Card className="mt-6">
         <h2 className="font-semibold text-brand-ink">New post</h2>
         <form action={createBlogPostAction} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input name="title_mn" placeholder="Title (MN)" required className={inputCls} />
@@ -32,15 +37,20 @@ export default async function AdminBlogPage() {
           <textarea name="content_en" placeholder="Content (EN)" className={`sm:col-span-2 ${textareaCls}`} />
           <input name="cover_image_url" placeholder="Cover image URL (optional)" className={`sm:col-span-2 ${inputCls}`} />
           <input name="author_name" placeholder="Author name (optional)" className={inputCls} />
-          <button type="submit" className="w-fit rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark sm:col-span-2">
+          <Button type="submit" size="sm" className="w-fit sm:col-span-2">
             Create post
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
 
       <div className="mt-6 space-y-6">
         {(posts ?? []).map((post) => (
-          <div key={post.id} className="rounded-card border border-brand-gray-light bg-white p-6">
+          <Card key={post.id}>
+            <div className="mb-3 flex items-center justify-between">
+              <Badge variant={post.is_published ? "success" : "neutral"}>
+                {post.is_published ? "Published" : "Draft"}
+              </Badge>
+            </div>
             <form action={updateBlogPostAction} className="space-y-4">
               <input type="hidden" name="id" value={post.id} />
               <div className="grid gap-3 sm:grid-cols-2">
@@ -99,20 +109,24 @@ export default async function AdminBlogPage() {
                   <input type="checkbox" name="is_published" defaultChecked={post.is_published} />
                   Published
                 </label>
-                <button type="submit" className="rounded-full bg-brand-ink px-5 py-2 text-sm font-semibold text-white">
+                <Button type="submit" size="sm">
                   Save
-                </button>
+                </Button>
               </div>
             </form>
             <form action={deleteBlogPostAction} className="mt-3 border-t border-brand-gray-light pt-3">
               <input type="hidden" name="id" value={post.id} />
-              <button type="submit" className="text-xs font-medium text-brand-red hover:underline">
+              <Button type="submit" variant="danger" size="sm">
                 Delete post
-              </button>
+              </Button>
             </form>
-          </div>
+          </Card>
         ))}
-        {(posts ?? []).length === 0 && <p className="text-brand-gray">No posts yet.</p>}
+        {(posts ?? []).length === 0 && (
+          <Card>
+            <EmptyState icon={Newspaper} title="No posts yet" description="Posts you create will appear here." />
+          </Card>
+        )}
       </div>
     </div>
   );

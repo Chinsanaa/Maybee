@@ -111,6 +111,17 @@ export function faqJsonLd(faqs: { question_mn: string; question_en: string; answ
   };
 }
 
+export function aboutPageJsonLd(business: BusinessInfo, locale: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: `${business.name} — About`,
+    url: `${siteUrl()}/${locale}/about`,
+    inLanguage: locale,
+    about: { "@type": "Organization", name: business.name },
+  };
+}
+
 export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",

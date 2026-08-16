@@ -27,7 +27,7 @@ export async function ProductCard({
   return (
     <Link
       href={`/product/${slug}`}
-      className="group flex flex-col overflow-hidden rounded-card border border-brand-gray-light bg-white transition-shadow hover:shadow-lg"
+      className="group flex flex-col overflow-hidden rounded-card border border-brand-gray-light bg-white shadow-card transition-shadow hover:shadow-card-hover"
     >
       <div className="relative aspect-square w-full overflow-hidden bg-brand-cream">
         {primaryImage ? (

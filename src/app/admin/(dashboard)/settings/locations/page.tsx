@@ -4,13 +4,15 @@ import {
   updateLocationAction,
   deleteLocationAction,
 } from "@/app/actions/admin-location-actions";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const DAYS = [
   ["mon", "Mon"], ["tue", "Tue"], ["wed", "Wed"], ["thu", "Thu"],
   ["fri", "Fri"], ["sat", "Sat"], ["sun", "Sun"],
 ] as const;
 
-const inputCls = "mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm";
+const inputCls = "mt-1 w-full rounded-card border border-brand-gray-light px-3 py-2 text-sm";
 
 export default async function AdminLocationsPage() {
   const supabase = await createServerSupabaseClient();
@@ -24,7 +26,7 @@ export default async function AdminLocationsPage() {
       <h1 className="font-display text-2xl font-extrabold text-brand-ink">Locations</h1>
       <p className="mt-1 text-sm text-brand-gray">Manage each physical branch — address, hours, phone, and map.</p>
 
-      <div className="mt-6 rounded-card border border-brand-gray-light bg-white p-6">
+      <Card className="mt-6">
         <h2 className="font-semibold text-brand-ink">Add branch</h2>
         <form action={createLocationAction} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input name="name_mn" placeholder="Name (MN)" required className={inputCls} />
@@ -38,15 +40,15 @@ export default async function AdminLocationsPage() {
           <input name="google_maps_embed_url" placeholder="Google Maps embed URL" className={`sm:col-span-2 ${inputCls}`} />
           <input name="latitude" type="number" step="any" placeholder="Latitude" className={inputCls} />
           <input name="longitude" type="number" step="any" placeholder="Longitude" className={inputCls} />
-          <button type="submit" className="w-fit rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark sm:col-span-2">
+          <Button type="submit" size="sm" className="w-fit sm:col-span-2">
             Add branch
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
 
       <div className="mt-6 space-y-6">
         {(locations ?? []).map((location) => (
-          <div key={location.id} className="rounded-card border border-brand-gray-light bg-white p-6">
+          <Card key={location.id}>
             <form action={updateLocationAction} className="space-y-4">
               <input type="hidden" name="id" value={location.id} />
               <div className="grid gap-3 sm:grid-cols-2">
@@ -108,14 +110,14 @@ export default async function AdminLocationsPage() {
                           type="time"
                           name={`hours_${key}_open`}
                           defaultValue={hours[key]?.open ?? ""}
-                          className="rounded-lg border border-brand-gray-light px-2 py-1 text-sm"
+                          className="rounded-card border border-brand-gray-light px-2 py-1 text-sm"
                         />
                         <span>–</span>
                         <input
                           type="time"
                           name={`hours_${key}_close`}
                           defaultValue={hours[key]?.close ?? ""}
-                          className="rounded-lg border border-brand-gray-light px-2 py-1 text-sm"
+                          className="rounded-card border border-brand-gray-light px-2 py-1 text-sm"
                         />
                       </div>
                     );
@@ -132,18 +134,18 @@ export default async function AdminLocationsPage() {
                   <input type="checkbox" name="is_primary" defaultChecked={location.is_primary} />
                   Primary branch
                 </label>
-                <button type="submit" className="rounded-full bg-brand-ink px-5 py-2 text-sm font-semibold text-white">
+                <Button type="submit" size="sm">
                   Save
-                </button>
+                </Button>
               </div>
             </form>
             <form action={deleteLocationAction} className="mt-3 border-t border-brand-gray-light pt-3">
               <input type="hidden" name="id" value={location.id} />
-              <button type="submit" className="text-xs font-medium text-brand-red hover:underline">
+              <Button type="submit" variant="danger" size="sm">
                 Delete branch
-              </button>
+              </Button>
             </form>
-          </div>
+          </Card>
         ))}
       </div>
     </div>

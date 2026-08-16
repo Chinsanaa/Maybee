@@ -6,6 +6,11 @@ import {
   deleteReviewAction,
 } from "@/app/actions/admin-review-actions";
 import { StarRating } from "@/components/product/star-rating";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { MessageSquare } from "lucide-react";
 
 export default async function AdminReviewsPage({
   searchParams,
@@ -43,20 +48,14 @@ export default async function AdminReviewsPage({
 
       <div className="mt-6 space-y-3">
         {(reviews ?? []).map((r) => (
-          <div key={r.id} className="rounded-card border border-brand-gray-light bg-white p-4">
+          <Card key={r.id} padding="p-4">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-3">
                 <StarRating value={r.rating} />
                 <span className="font-medium text-brand-ink">{r.customer_name}</span>
-                <span
-                  className={
-                    r.is_approved
-                      ? "rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800"
-                      : "rounded-full bg-brand-honey/40 px-2 py-0.5 text-xs font-semibold text-brand-ink"
-                  }
-                >
+                <Badge variant={r.is_approved ? "success" : "warning"}>
                   {r.is_approved ? "Approved" : "Pending"}
-                </span>
+                </Badge>
               </div>
               <span className="text-xs text-brand-gray">{new Date(r.created_at).toLocaleDateString()}</span>
             </div>
@@ -70,29 +69,31 @@ export default async function AdminReviewsPage({
               {!r.is_approved && (
                 <form action={approveReviewAction}>
                   <input type="hidden" name="id" value={r.id} />
-                  <button type="submit" className="text-xs font-semibold text-green-700 hover:underline">
+                  <Button type="submit" variant="ghost" size="sm" className="!text-green-700">
                     Approve
-                  </button>
+                  </Button>
                 </form>
               )}
               {r.is_approved && (
                 <form action={rejectReviewAction}>
                   <input type="hidden" name="id" value={r.id} />
-                  <button type="submit" className="text-xs font-semibold text-brand-gray hover:underline">
+                  <Button type="submit" variant="ghost" size="sm" className="!text-brand-gray">
                     Unapprove
-                  </button>
+                  </Button>
                 </form>
               )}
               <form action={deleteReviewAction}>
                 <input type="hidden" name="id" value={r.id} />
-                <button type="submit" className="text-xs font-semibold text-brand-red hover:underline">
+                <Button type="submit" variant="danger" size="sm">
                   Delete
-                </button>
+                </Button>
               </form>
             </div>
-          </div>
+          </Card>
         ))}
-        {(reviews ?? []).length === 0 && <p className="text-brand-gray">No reviews found.</p>}
+        {(reviews ?? []).length === 0 && (
+          <EmptyState icon={MessageSquare} title="No reviews found" description="Guest reviews will appear here once submitted." />
+        )}
       </div>
     </div>
   );

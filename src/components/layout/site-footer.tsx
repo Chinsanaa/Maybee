@@ -54,19 +54,31 @@ export async function SiteFooter({ business }: { business: BusinessInfo }) {
         </div>
 
         <div>
-          <p className="text-sm font-semibold text-brand-ink">{t("shop")}</p>
+          <p className="text-sm font-semibold text-brand-ink">
+            {business.showcase_enabled ? t("shop") : t("explore")}
+          </p>
           <ul className="mt-3 space-y-2 text-sm text-brand-gray">
-            <li><Link href="/shop" className="hover:text-brand-red">{t("shop")}</Link></li>
-            <li><Link href="/shop?filter=new" className="hover:text-brand-red">New</Link></li>
-            <li><Link href="/shop?filter=bestseller" className="hover:text-brand-red">Best Sellers</Link></li>
-            <li><Link href="/gift-finder" className="hover:text-brand-red">Gift Finder</Link></li>
-            <li><Link href="/blog" className="hover:text-brand-red">{t("blog")}</Link></li>
+            {business.showcase_enabled ? (
+              <>
+                <li><Link href="/shop" className="hover:text-brand-red">{t("shop")}</Link></li>
+                <li><Link href="/shop?filter=new" className="hover:text-brand-red">New</Link></li>
+                <li><Link href="/shop?filter=bestseller" className="hover:text-brand-red">Best Sellers</Link></li>
+                <li><Link href="/gift-finder" className="hover:text-brand-red">Gift Finder</Link></li>
+              </>
+            ) : (
+              <>
+                <li><Link href="/about" className="hover:text-brand-red">{t("about")}</Link></li>
+                <li><Link href="/faq" className="hover:text-brand-red">{t("faq")}</Link></li>
+                <li><Link href="/store" className="hover:text-brand-red">{t("storeLocation")}</Link></li>
+              </>
+            )}
           </ul>
         </div>
 
         <div>
           <p className="text-sm font-semibold text-brand-ink">{t("help")}</p>
           <ul className="mt-3 space-y-2 text-sm text-brand-gray">
+            <li><Link href="/blog" className="hover:text-brand-red">{t("blog")}</Link></li>
             <li><Link href="/faq" className="hover:text-brand-red">{t("faq")}</Link></li>
             <li><Link href="/policies/returns" className="hover:text-brand-red">{t("returns")}</Link></li>
             <li><Link href="/contact" className="hover:text-brand-red">{t("contact")}</Link></li>

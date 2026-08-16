@@ -1,7 +1,11 @@
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createFaqAction, updateFaqAction, deleteFaqAction } from "@/app/actions/admin-faq-actions";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { HelpCircle } from "lucide-react";
 
-const inputCls = "mt-1 w-full rounded-lg border border-brand-gray-light px-3 py-2 text-sm";
+const inputCls = "mt-1 w-full rounded-card border border-brand-gray-light px-3 py-2 text-sm";
 const textareaCls = `${inputCls} min-h-20`;
 
 export default async function AdminFaqPage() {
@@ -17,7 +21,7 @@ export default async function AdminFaqPage() {
       <h1 className="font-display text-2xl font-extrabold text-brand-ink">FAQ</h1>
       <p className="mt-1 text-sm text-brand-gray">Manage the questions shown on the site-wide FAQ page.</p>
 
-      <div className="mt-6 rounded-card border border-brand-gray-light bg-white p-6">
+      <Card className="mt-6">
         <h2 className="font-semibold text-brand-ink">Add question</h2>
         <form action={createFaqAction} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input name="question_mn" placeholder="Question (MN)" required className={`sm:col-span-2 ${inputCls}`} />
@@ -26,15 +30,15 @@ export default async function AdminFaqPage() {
           <textarea name="answer_en" placeholder="Answer (EN)" className={`sm:col-span-2 ${textareaCls}`} />
           <input name="category" placeholder="Category (general / ordering / products)" defaultValue="general" className={inputCls} />
           <input name="sort_order" type="number" placeholder="Sort order" defaultValue={0} className={inputCls} />
-          <button type="submit" className="w-fit rounded-full bg-brand-red px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-red-dark sm:col-span-2">
+          <Button type="submit" size="sm" className="w-fit sm:col-span-2">
             Add question
-          </button>
+          </Button>
         </form>
-      </div>
+      </Card>
 
       <div className="mt-6 space-y-4">
         {(faqs ?? []).map((faq) => (
-          <div key={faq.id} className="rounded-card border border-brand-gray-light bg-white p-6">
+          <Card key={faq.id}>
             <form action={updateFaqAction} className="space-y-3">
               <input type="hidden" name="id" value={faq.id} />
               <div className="grid gap-3 sm:grid-cols-2">
@@ -68,20 +72,24 @@ export default async function AdminFaqPage() {
                   <input type="checkbox" name="is_active" defaultChecked={faq.is_active} />
                   Active
                 </label>
-                <button type="submit" className="rounded-full bg-brand-ink px-5 py-2 text-sm font-semibold text-white">
+                <Button type="submit" size="sm">
                   Save
-                </button>
+                </Button>
               </div>
             </form>
             <form action={deleteFaqAction} className="mt-3 border-t border-brand-gray-light pt-3">
               <input type="hidden" name="id" value={faq.id} />
-              <button type="submit" className="text-xs font-medium text-brand-red hover:underline">
+              <Button type="submit" variant="danger" size="sm">
                 Delete
-              </button>
+              </Button>
             </form>
-          </div>
+          </Card>
         ))}
-        {(faqs ?? []).length === 0 && <p className="text-brand-gray">No FAQ entries yet.</p>}
+        {(faqs ?? []).length === 0 && (
+          <Card>
+            <EmptyState icon={HelpCircle} title="No FAQ entries yet" description="Questions you add will appear here." />
+          </Card>
+        )}
       </div>
     </div>
   );

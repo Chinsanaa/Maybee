@@ -103,6 +103,8 @@ export type Database = {
       }
       business_info: {
         Row: {
+          about_story_en: string
+          about_story_mn: string
           currency_code: string
           currency_symbol: string
           description_en: string
@@ -114,10 +116,13 @@ export type Database = {
           logo_url: string
           name: string
           phone: string
+          showcase_enabled: boolean
           tiktok_url: string
           updated_at: string
         }
         Insert: {
+          about_story_en?: string
+          about_story_mn?: string
           currency_code?: string
           currency_symbol?: string
           description_en?: string
@@ -129,10 +134,13 @@ export type Database = {
           logo_url?: string
           name?: string
           phone?: string
+          showcase_enabled?: boolean
           tiktok_url?: string
           updated_at?: string
         }
         Update: {
+          about_story_en?: string
+          about_story_mn?: string
           currency_code?: string
           currency_symbol?: string
           description_en?: string
@@ -144,6 +152,7 @@ export type Database = {
           logo_url?: string
           name?: string
           phone?: string
+          showcase_enabled?: boolean
           tiktok_url?: string
           updated_at?: string
         }

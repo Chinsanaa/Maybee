@@ -29,7 +29,15 @@
     "featuredProducts": "Featured Products",
     "whyMaybeeTitle": "Why Maybee Pop & Joy?",
     "storeTitle": "Visit Our Store",
-    "viewAll": "View All"
+    "viewAll": "View All",
+    "ctaLearnMore": "About Us",
+    "ctaReadBlog": "Read Our Blog",
+    "aboutExcerptTitle": "Our Story",
+    "aboutExcerptCta": "Read our story",
+    "faqTeaserTitle": "Frequently Asked Questions",
+    "faqTeaserCta": "See all FAQs",
+    "blogTeaserTitle": "From the Blog",
+    "blogTeaserCta": "Visit our blog"
   },
   "product": {
     "callToInquire": "Call with Questions",
@@ -71,7 +79,13 @@
     "hours": "Hours",
     "copyright": "All rights reserved.",
     "blog": "Blog",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "about": "About Us",
+    "explore": "Explore"
+  },
+  "about": {
+    "title": "About Us",
+    "breadcrumb": "About"
   },
   "blog": {
     "title": "Blog",

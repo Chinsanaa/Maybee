@@ -29,7 +29,15 @@
     "featuredProducts": "Онцлох бүтээгдэхүүн",
     "whyMaybeeTitle": "Яагаад Maybee Pop & Joy вэ?",
     "storeTitle": "Манай дэлгүүрт зочилно уу",
-    "viewAll": "Бүгдийг үзэх"
+    "viewAll": "Бүгдийг үзэх",
+    "ctaLearnMore": "Бидний тухай",
+    "ctaReadBlog": "Блог унших",
+    "aboutExcerptTitle": "Бидний тухай",
+    "aboutExcerptCta": "Дэлгэрэнгүй унших",
+    "faqTeaserTitle": "Түгээмэл асуултууд",
+    "faqTeaserCta": "Бүх асуултыг үзэх",
+    "blogTeaserTitle": "Блогоос",
+    "blogTeaserCta": "Блог руу очих"
   },
   "product": {
     "callToInquire": "Асуулт байвал холбогдох",
@@ -71,7 +79,13 @@
     "hours": "Ажиллах цаг",
     "copyright": "Бүх эрх хуулиар хамгаалагдсан.",
     "blog": "Блог",
-    "faq": "Асуулт хариулт"
+    "faq": "Асуулт хариулт",
+    "about": "Бидний тухай",
+    "explore": "Судлах"
+  },
+  "about": {
+    "title": "Бидний тухай",
+    "breadcrumb": "Бидний тухай"
   },
   "blog": {
     "title": "Блог",

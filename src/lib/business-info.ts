@@ -17,6 +17,9 @@ const FALLBACK: BusinessInfo = {
   currency_code: "MNT",
   currency_symbol: "₮",
   google_review_url: "",
+  showcase_enabled: false,
+  about_story_mn: "",
+  about_story_en: "",
   updated_at: new Date().toISOString(),
 };
 

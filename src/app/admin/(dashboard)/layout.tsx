@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getAdminSession } from "@/lib/admin-auth";
 import { adminLogoutAction } from "@/app/actions/admin-auth-actions";
+import { AdminNavLink } from "@/components/admin/admin-nav-link";
 import {
   LayoutDashboard,
   Package,
@@ -39,21 +40,14 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
         <p className="font-display px-2 text-lg font-extrabold text-brand-ink">Maybee Admin</p>
         <nav className="mt-6 space-y-1">
           {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-brand-ink hover:bg-brand-cream"
-            >
-              <item.icon className="h-4 w-4" aria-hidden />
-              {item.label}
-            </Link>
+            <AdminNavLink key={item.href} href={item.href} label={item.label} icon={item.icon} />
           ))}
         </nav>
         <div className="mt-8 border-t border-brand-gray-light pt-4">
           <Link
             href="/mn"
             target="_blank"
-            className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-brand-gray hover:bg-brand-cream"
+            className="flex items-center gap-2 rounded-card px-3 py-2 text-sm text-brand-gray hover:bg-brand-cream"
           >
             <ExternalLink className="h-4 w-4" aria-hidden />
             View store
@@ -62,7 +56,7 @@ export default async function AdminDashboardLayout({ children }: { children: Rea
           <form action={adminLogoutAction}>
             <button
               type="submit"
-              className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-brand-gray hover:bg-brand-cream"
+              className="flex w-full items-center gap-2 rounded-card px-3 py-2 text-sm text-brand-gray hover:bg-brand-cream"
             >
               <LogOut className="h-4 w-4" aria-hidden />
               Sign out
