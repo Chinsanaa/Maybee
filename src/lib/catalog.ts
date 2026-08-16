@@ -167,6 +167,17 @@ export async function searchProducts(q: string, limit = 24) {
   return (data ?? []) as unknown as ProductWithImages[];
 }
 
+export async function getProductsBySlugs(slugs: string[]): Promise<ProductWithImages[]> {
+  if (slugs.length === 0) return [];
+  const supabase = createPublicClient();
+  const { data } = await supabase
+    .from("product")
+    .select(PRODUCT_SELECT)
+    .or(slugs.map((s) => `slug_mn.eq.${s},slug_en.eq.${s}`).join(","))
+    .eq("is_published", true);
+  return (data ?? []) as unknown as ProductWithImages[];
+}
+
 export const getDistinctBrands = cache(async () => {
   const supabase = createPublicClient();
   const { data } = await supabase.from("product").select("brand").eq("is_published", true);

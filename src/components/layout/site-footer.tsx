@@ -60,12 +60,14 @@ export async function SiteFooter({ business }: { business: BusinessInfo }) {
             <li><Link href="/shop?filter=new" className="hover:text-brand-red">New</Link></li>
             <li><Link href="/shop?filter=bestseller" className="hover:text-brand-red">Best Sellers</Link></li>
             <li><Link href="/gift-finder" className="hover:text-brand-red">Gift Finder</Link></li>
+            <li><Link href="/blog" className="hover:text-brand-red">{t("blog")}</Link></li>
           </ul>
         </div>
 
         <div>
           <p className="text-sm font-semibold text-brand-ink">{t("help")}</p>
           <ul className="mt-3 space-y-2 text-sm text-brand-gray">
+            <li><Link href="/faq" className="hover:text-brand-red">{t("faq")}</Link></li>
             <li><Link href="/policies/returns" className="hover:text-brand-red">{t("returns")}</Link></li>
             <li><Link href="/contact" className="hover:text-brand-red">{t("contact")}</Link></li>
             <li><Link href="/policies/privacy" className="hover:text-brand-red">{t("privacy")}</Link></li>

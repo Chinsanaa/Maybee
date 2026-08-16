@@ -74,6 +74,43 @@ export function localBusinessJsonLd(location: StoreLocation, business: BusinessI
   };
 }
 
+export function blogPostingJsonLd(
+  post: { title_mn: string; title_en: string; excerpt_mn: string; excerpt_en: string; cover_image_url: string | null; author_name: string | null; published_at: string | null; updated_at: string; slug: string },
+  locale: string,
+  business: BusinessInfo
+) {
+  const title = locale === "en" && post.title_en ? post.title_en : post.title_mn;
+  const description = locale === "en" && post.excerpt_en ? post.excerpt_en : post.excerpt_mn;
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description: description || undefined,
+    image: post.cover_image_url || undefined,
+    author: { "@type": "Organization", name: post.author_name || business.name },
+    datePublished: post.published_at || undefined,
+    dateModified: post.updated_at,
+    url: `${siteUrl()}/${locale}/blog/${post.slug}`,
+    mainEntityOfPage: `${siteUrl()}/${locale}/blog/${post.slug}`,
+  };
+}
+
+/** FAQPage schema — built only from real, active FAQ rows, never fabricated. */
+export function faqJsonLd(faqs: { question_mn: string; question_en: string; answer_mn: string; answer_en: string }[], locale: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: locale === "en" && faq.question_en ? faq.question_en : faq.question_mn,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: locale === "en" && faq.answer_en ? faq.answer_en : faq.answer_mn,
+      },
+    })),
+  };
+}
+
 export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
   return {
     "@context": "https://schema.org",

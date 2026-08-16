@@ -13,6 +13,8 @@ import {
   Link2,
   MapPin,
   Star,
+  Newspaper,
+  HelpCircle,
 } from "lucide-react";
 
 const NAV = [
@@ -21,6 +23,8 @@ const NAV = [
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/settings/locations", label: "Locations", icon: MapPin },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
+  { href: "/admin/blog", label: "Blog", icon: Newspaper },
+  { href: "/admin/faq", label: "FAQ", icon: HelpCircle },
   { href: "/admin/settings", label: "Settings", icon: Settings },
   { href: "/admin/settings/redirects", label: "SEO Redirects", icon: Link2 },
 ];

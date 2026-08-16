@@ -14,6 +14,8 @@ import { ProductCard } from "@/components/product/product-card";
 import { ReviewForm } from "@/components/product/review-form";
 import { StarRating } from "@/components/product/star-rating";
 import { getApprovedReviews, getReviewStats } from "@/lib/reviews";
+import { TrackRecentlyViewed } from "@/components/product/track-recently-viewed";
+import { RecentlyViewedRail } from "@/components/product/recently-viewed-rail";
 import { Store, ShieldCheck } from "lucide-react";
 
 function localized(mn: string, en: string, locale: string) {
@@ -112,6 +114,8 @@ export default async function ProductPage({
           ]),
         }}
       />
+
+      <TrackRecentlyViewed slug={slug} />
 
       <Breadcrumbs
         locale={locale}
@@ -298,6 +302,14 @@ export default async function ProductPage({
           </div>
         </section>
       )}
+
+      <RecentlyViewedRail
+        excludeSlug={slug}
+        locale={locale}
+        currencySymbol={business.currency_symbol}
+        title={t("recentlyViewed")}
+        outOfStockLabel={t("outOfStock")}
+      />
     </div>
   );
 }

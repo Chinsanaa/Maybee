@@ -1,0 +1,34 @@
+import { cache } from "react";
+import { createPublicClient } from "@/lib/supabase/public";
+import type { Tables } from "@/lib/database.types";
+
+export type BlogPost = Tables<"blog_post">;
+
+export const getPublishedPosts = cache(async (): Promise<BlogPost[]> => {
+  try {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from("blog_post")
+      .select("*")
+      .eq("is_published", true)
+      .order("published_at", { ascending: false });
+    return data ?? [];
+  } catch {
+    return [];
+  }
+});
+
+export const getPostBySlug = cache(async (slug: string): Promise<BlogPost | null> => {
+  try {
+    const supabase = createPublicClient();
+    const { data } = await supabase
+      .from("blog_post")
+      .select("*")
+      .eq("slug", slug)
+      .eq("is_published", true)
+      .maybeSingle();
+    return data ?? null;
+  } catch {
+    return null;
+  }
+});

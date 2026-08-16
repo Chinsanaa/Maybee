@@ -54,7 +54,8 @@
     "yourRating": "Таны үнэлгээ",
     "yourName": "Таны нэр",
     "yourReview": "Сэтгэгдэл",
-    "submitReview": "Илгээх"
+    "submitReview": "Илгээх",
+    "recentlyViewed": "Саяхан үзсэн"
   },
   "footer": {
     "aboutTitle": "Maybee Pop & Joy",
@@ -68,7 +69,18 @@
     "storeLocation": "Дэлгүүрийн байршил",
     "phone": "Утас",
     "hours": "Ажиллах цаг",
-    "copyright": "Бүх эрх хуулиар хамгаалагдсан."
+    "copyright": "Бүх эрх хуулиар хамгаалагдсан.",
+    "blog": "Блог",
+    "faq": "Асуулт хариулт"
+  },
+  "blog": {
+    "title": "Блог",
+    "noPosts": "Одоогоор нийтлэл алга — удахгүй нэмэгдэнэ.",
+    "backToBlog": "Блог руу буцах"
+  },
+  "faq": {
+    "title": "Түгээмэл асуултууд",
+    "noResults": "Одоогоор асуулт алга байна."
   },
   "store": {
     "title": "Дэлгүүрийн байршил",

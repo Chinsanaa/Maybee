@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllCategories, listProducts } from "@/lib/catalog";
 import { getStoreLocations } from "@/lib/business-info";
+import { getPublishedPosts } from "@/lib/blog";
 import { AGE_BANDS, BUDGET_BANDS } from "@/lib/collections";
 import { routing } from "@/i18n/routing";
 
@@ -11,6 +12,8 @@ const STATIC_PATHS = [
   "/shop",
   "/store",
   "/gift-finder",
+  "/blog",
+  "/faq",
   "/contact",
   "/policies/returns",
   "/policies/privacy",
@@ -18,10 +21,11 @@ const STATIC_PATHS = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [categories, { products }, locations] = await Promise.all([
+  const [categories, { products }, locations, posts] = await Promise.all([
     getAllCategories(),
     listProducts({ pageSize: 1000 }),
     getStoreLocations(),
+    getPublishedPosts(),
   ]);
 
   const entries: MetadataRoute.Sitemap = [];
@@ -64,6 +68,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: product.updated_at,
         changeFrequency: "weekly",
         priority: 0.8,
+      });
+    }
+    for (const post of posts) {
+      entries.push({
+        url: `${siteUrl}/${locale}/blog/${post.slug}`,
+        lastModified: post.updated_at,
+        changeFrequency: "monthly",
+        priority: 0.5,
       });
     }
   }

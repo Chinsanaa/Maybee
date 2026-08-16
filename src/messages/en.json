@@ -54,7 +54,8 @@
     "yourRating": "Your rating",
     "yourName": "Your name",
     "yourReview": "Your review",
-    "submitReview": "Submit"
+    "submitReview": "Submit",
+    "recentlyViewed": "Recently Viewed"
   },
   "footer": {
     "aboutTitle": "Maybee Pop & Joy",
@@ -68,7 +69,18 @@
     "storeLocation": "Store Location",
     "phone": "Phone",
     "hours": "Hours",
-    "copyright": "All rights reserved."
+    "copyright": "All rights reserved.",
+    "blog": "Blog",
+    "faq": "FAQ"
+  },
+  "blog": {
+    "title": "Blog",
+    "noPosts": "No posts yet — check back soon.",
+    "backToBlog": "Back to Blog"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "noResults": "No FAQ entries yet."
   },
   "store": {
     "title": "Store Locations",
