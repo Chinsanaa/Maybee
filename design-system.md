@@ -70,6 +70,8 @@ Shared primitives live in `src/components/ui/`. Use them; don't re-write their s
 | `Skeleton` / `ProductCardSkeleton` | `skeleton.tsx` | `loading.tsx` route segments. |
 | `TextField` / `TextAreaField` | `form-field.tsx` | Every form input outside of one-off custom widgets (e.g. the star-rating picker). |
 
+**Maps**: `src/components/store/store-map.tsx` (Leaflet + OpenStreetMap, no API key) renders a branch's location plus admin-entered nearby landmarks. It's a client component and touches `window` at import time, so it's never imported directly into a server page — go through `src/components/store/store-map-loader.tsx` (a thin `"use client"` wrapper around `next/dynamic(..., { ssr: false })`), since Next.js App Router rejects `ssr: false` dynamic imports written directly in a Server Component. Store marker = `brand-red` pin, landmark markers = `brand-ink` pin, both `L.divIcon` with inline SVG (no external marker-icon assets, sidesteps the classic Leaflet-in-bundlers icon path bug). Only render the map when real `latitude`/`longitude` exist — never a guessed pin.
+
 **Hard constraint**: `ProductCard` (`src/components/product/product-card.tsx`) is an **async Server Component** — it calls `getLocale()`/`getTranslations()` internally. It can never be imported into a `"use client"` component tree. Client components that need product data resolve it via a server action returning plain serializable fields and render it with a plain client-safe card instead (see `recently-viewed-card.tsx` for the pattern).
 
 ---
@@ -110,6 +112,6 @@ Shared primitives live in `src/components/ui/`. Use them; don't re-write their s
 Ideas drawn from loft.co.jp/en's site structure, scoped down to what actually fits a 2-branch physical toy retailer rather than a national chain. None of these are implemented; they're here so they're discoverable next time this file is revisited.
 
 - **Supplier/wholesale inquiry.** LOFT has a "Product Proposals" page for vendors pitching products. A lightweight second form (or a mode toggle on `/contact`) for toy suppliers wanting Maybee to carry their products is a genuinely useful equivalent — unlike LOFT's press/media-relations form, which has no Maybee analog.
-- **Split store news from evergreen blog.** LOFT separates a frequently-updated "News" feed from static content. `blog_post` could grow a `post_type` (`guide` | `news`) column so short promo/update posts don't dilute the evergreen gift-guide content — no new table or route needed, just a filter.
+- ~~**Split store news from evergreen blog.**~~ **Done** — `blog_post.post_type` (`guide` | `news`, default `guide`), filterable via `/blog?type=guide|news` with tabs on the blog index page, managed from `/admin/blog`.
 - **In-store payment methods note.** LOFT has a dedicated payment-services page. For Maybee this doesn't warrant a new route — a short "what payment methods are accepted in-store" line fits naturally into the FAQ's `ordering` category or the About page.
 - **Icon+label quick-nav row on the homepage.** LOFT's homepage leads with a 3-icon row (Tax Free / FAQ / About) linking straight to key info pages. Maybee's showcase-off homepage could adopt the same pattern — About / FAQ / Store as a single icon+label row near the top — as a lighter, faster-scanning alternative to (or ahead of) the current stacked sections.

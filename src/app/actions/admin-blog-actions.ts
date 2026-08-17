@@ -24,6 +24,7 @@ function postFromForm(formData: FormData) {
     content_en: String(formData.get("content_en") ?? ""),
     cover_image_url: String(formData.get("cover_image_url") ?? "") || null,
     author_name: String(formData.get("author_name") ?? "") || null,
+    post_type: formData.get("post_type") === "news" ? "news" : "guide",
     seo_title_mn: String(formData.get("seo_title_mn") ?? ""),
     seo_title_en: String(formData.get("seo_title_en") ?? ""),
     seo_description_mn: String(formData.get("seo_description_mn") ?? ""),

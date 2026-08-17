@@ -49,6 +49,7 @@ export type Database = {
           excerpt_mn: string
           id: string
           is_published: boolean
+          post_type: string
           published_at: string | null
           seo_description_en: string
           seo_description_mn: string
@@ -69,6 +70,7 @@ export type Database = {
           excerpt_mn?: string
           id?: string
           is_published?: boolean
+          post_type?: string
           published_at?: string | null
           seo_description_en?: string
           seo_description_mn?: string
@@ -89,6 +91,7 @@ export type Database = {
           excerpt_mn?: string
           id?: string
           is_published?: boolean
+          post_type?: string
           published_at?: string | null
           seo_description_en?: string
           seo_description_mn?: string
@@ -602,6 +605,7 @@ export type Database = {
           image_url: string
           is_active: boolean
           is_primary: boolean
+          landmarks: Json
           latitude: number | null
           longitude: number | null
           name_en: string
@@ -623,6 +627,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean
           is_primary?: boolean
+          landmarks?: Json
           latitude?: number | null
           longitude?: number | null
           name_en?: string
@@ -644,6 +649,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean
           is_primary?: boolean
+          landmarks?: Json
           latitude?: number | null
           longitude?: number | null
           name_en?: string

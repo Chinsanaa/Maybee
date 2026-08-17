@@ -90,7 +90,12 @@
   "blog": {
     "title": "Blog",
     "noPosts": "No posts yet — check back soon.",
-    "backToBlog": "Back to Blog"
+    "backToBlog": "Back to Blog",
+    "filterAll": "All",
+    "filterGuides": "Guides",
+    "filterNews": "Store News",
+    "typeGuide": "Guide",
+    "typeNews": "News"
   },
   "faq": {
     "title": "Frequently Asked Questions",
