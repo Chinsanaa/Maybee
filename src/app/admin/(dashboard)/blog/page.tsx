@@ -30,7 +30,11 @@ export default async function AdminBlogPage() {
         <form action={createBlogPostAction} className="mt-4 grid gap-3 sm:grid-cols-2">
           <input name="title_mn" placeholder="Title (MN)" required className={inputCls} />
           <input name="title_en" placeholder="Title (EN)" className={inputCls} />
-          <input name="slug" placeholder="Slug (auto from title if blank)" className={`sm:col-span-2 ${inputCls}`} />
+          <select name="post_type" defaultValue="guide" className={inputCls}>
+            <option value="guide">Guide (evergreen)</option>
+            <option value="news">News (store update/promo)</option>
+          </select>
+          <input name="slug" placeholder="Slug (auto from title if blank)" className={inputCls} />
           <textarea name="excerpt_mn" placeholder="Excerpt (MN)" className={`sm:col-span-2 ${inputCls}`} />
           <textarea name="excerpt_en" placeholder="Excerpt (EN)" className={`sm:col-span-2 ${inputCls}`} />
           <textarea name="content_mn" placeholder="Content (MN)" className={`sm:col-span-2 ${textareaCls}`} />
@@ -46,9 +50,12 @@ export default async function AdminBlogPage() {
       <div className="mt-6 space-y-6">
         {(posts ?? []).map((post) => (
           <Card key={post.id}>
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-3 flex items-center gap-2">
               <Badge variant={post.is_published ? "success" : "neutral"}>
                 {post.is_published ? "Published" : "Draft"}
+              </Badge>
+              <Badge variant={post.post_type === "news" ? "warning" : "neutral"}>
+                {post.post_type === "news" ? "News" : "Guide"}
               </Badge>
             </div>
             <form action={updateBlogPostAction} className="space-y-4">
@@ -61,6 +68,13 @@ export default async function AdminBlogPage() {
                 <label className="block text-sm">
                   Title (EN)
                   <input name="title_en" defaultValue={post.title_en} className={inputCls} />
+                </label>
+                <label className="block text-sm">
+                  Post type
+                  <select name="post_type" defaultValue={post.post_type} className={inputCls}>
+                    <option value="guide">Guide (evergreen)</option>
+                    <option value="news">News (store update/promo)</option>
+                  </select>
                 </label>
                 <label className="block text-sm sm:col-span-2">
                   Excerpt (MN)

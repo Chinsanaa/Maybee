@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { getPublishedPosts } from "@/lib/blog";
+import { getPublishedPosts, type BlogPostType } from "@/lib/blog";
 import { Breadcrumbs } from "@/components/shop/breadcrumbs";
+import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 
@@ -25,12 +26,25 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogIndexPage() {
+export default async function BlogIndexPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
+  const { type } = await searchParams;
+  const postType: BlogPostType | undefined = type === "guide" || type === "news" ? type : undefined;
+
   const [locale, t, posts] = await Promise.all([
     getLocale(),
     getTranslations("blog"),
-    getPublishedPosts(),
+    getPublishedPosts(postType),
   ]);
+
+  const tabs: { href: string; label: string; active: boolean }[] = [
+    { href: "/blog", label: t("filterAll"), active: !postType },
+    { href: "/blog?type=guide", label: t("filterGuides"), active: postType === "guide" },
+    { href: "/blog?type=news", label: t("filterNews"), active: postType === "news" },
+  ];
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
@@ -42,6 +56,22 @@ export default async function BlogIndexPage() {
         ]}
       />
       <h1 className="font-display text-3xl font-extrabold text-brand-ink">{t("title")}</h1>
+
+      <div className="mt-6 flex gap-2">
+        {tabs.map((tab) => (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={`rounded-full border px-3 py-1.5 text-sm font-medium ${
+              tab.active
+                ? "border-brand-red bg-brand-red text-white"
+                : "border-brand-gray-light text-brand-ink hover:border-brand-red"
+            }`}
+          >
+            {tab.label}
+          </Link>
+        ))}
+      </div>
 
       {posts.length === 0 ? (
         <p className="mt-6 text-brand-gray">{t("noPosts")}</p>
@@ -62,7 +92,10 @@ export default async function BlogIndexPage() {
                   </div>
                 )}
                 <div className="p-5">
-                  <h2 className="font-display text-lg font-bold text-brand-ink">{title}</h2>
+                  <Badge variant={post.post_type === "news" ? "warning" : "neutral"}>
+                    {post.post_type === "news" ? t("typeNews") : t("typeGuide")}
+                  </Badge>
+                  <h2 className="mt-2 font-display text-lg font-bold text-brand-ink">{title}</h2>
                   {excerpt && <p className="mt-2 text-sm text-brand-gray">{excerpt}</p>}
                   {post.published_at && (
                     <p className="mt-3 text-xs text-brand-gray">
