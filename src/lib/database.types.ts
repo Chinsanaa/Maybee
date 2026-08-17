@@ -602,6 +602,7 @@ export type Database = {
           image_url: string
           is_active: boolean
           is_primary: boolean
+          landmarks: Json
           latitude: number | null
           longitude: number | null
           name_en: string
@@ -623,6 +624,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean
           is_primary?: boolean
+          landmarks?: Json
           latitude?: number | null
           longitude?: number | null
           name_en?: string
@@ -644,6 +646,7 @@ export type Database = {
           image_url?: string
           is_active?: boolean
           is_primary?: boolean
+          landmarks?: Json
           latitude?: number | null
           longitude?: number | null
           name_en?: string

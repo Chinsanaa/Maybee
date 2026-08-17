@@ -51,7 +51,20 @@ export type BusinessHours = Record<
   { open: string; close: string } | null
 >;
 
-export type StoreLocation = Omit<Tables<"store_location">, "hours"> & { hours: BusinessHours };
+export type LandmarkCategory = "mall" | "shop" | "landmark" | "transit";
+
+export type Landmark = {
+  name_mn: string;
+  name_en: string;
+  category: LandmarkCategory;
+  latitude: number;
+  longitude: number;
+};
+
+export type StoreLocation = Omit<Tables<"store_location">, "hours" | "landmarks"> & {
+  hours: BusinessHours;
+  landmarks: Landmark[];
+};
 
 const EMPTY_HOURS: BusinessHours = {
   mon: null,
@@ -64,7 +77,11 @@ const EMPTY_HOURS: BusinessHours = {
 };
 
 function toStoreLocation(row: Tables<"store_location">): StoreLocation {
-  return { ...row, hours: (row.hours as BusinessHours) ?? EMPTY_HOURS };
+  return {
+    ...row,
+    hours: (row.hours as BusinessHours) ?? EMPTY_HOURS,
+    landmarks: Array.isArray(row.landmarks) ? (row.landmarks as unknown as Landmark[]) : [],
+  };
 }
 
 /** All active branches, ordered for display (primary/lowest sort_order first). */

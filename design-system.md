@@ -70,6 +70,8 @@ Shared primitives live in `src/components/ui/`. Use them; don't re-write their s
 | `Skeleton` / `ProductCardSkeleton` | `skeleton.tsx` | `loading.tsx` route segments. |
 | `TextField` / `TextAreaField` | `form-field.tsx` | Every form input outside of one-off custom widgets (e.g. the star-rating picker). |
 
+**Maps**: `src/components/store/store-map.tsx` (Leaflet + OpenStreetMap, no API key) renders a branch's location plus admin-entered nearby landmarks. It's a client component and touches `window` at import time, so it's never imported directly into a server page — go through `src/components/store/store-map-loader.tsx` (a thin `"use client"` wrapper around `next/dynamic(..., { ssr: false })`), since Next.js App Router rejects `ssr: false` dynamic imports written directly in a Server Component. Store marker = `brand-red` pin, landmark markers = `brand-ink` pin, both `L.divIcon` with inline SVG (no external marker-icon assets, sidesteps the classic Leaflet-in-bundlers icon path bug). Only render the map when real `latitude`/`longitude` exist — never a guessed pin.
+
 **Hard constraint**: `ProductCard` (`src/components/product/product-card.tsx`) is an **async Server Component** — it calls `getLocale()`/`getTranslations()` internally. It can never be imported into a `"use client"` component tree. Client components that need product data resolve it via a server action returning plain serializable fields and render it with a plain client-safe card instead (see `recently-viewed-card.tsx` for the pattern).
 
 ---

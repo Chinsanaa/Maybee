@@ -4,7 +4,18 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { getBusinessInfo, getStoreLocationBySlug, getStoreLocations, formatHoursSummary } from "@/lib/business-info";
 import { localBusinessJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 import { Breadcrumbs } from "@/components/shop/breadcrumbs";
+import { Card } from "@/components/ui/card";
+import { buttonClassName } from "@/components/ui/button";
+import { StoreMapLoader } from "@/components/store/store-map-loader";
+import { cn } from "@/lib/utils";
 import { MapPin, Phone, Clock } from "lucide-react";
+
+const LANDMARK_LABELS: Record<string, { mn: string; en: string }> = {
+  mall: { mn: "Худалдааны төв", en: "Mall" },
+  shop: { mn: "Дэлгүүр", en: "Shop" },
+  landmark: { mn: "Ориентир", en: "Landmark" },
+  transit: { mn: "Тээврийн зогсоол", en: "Transit" },
+};
 
 const DAY_LABELS_MN: Record<string, string> = {
   mon: "Даваа", tue: "Мягмар", wed: "Лхагва", thu: "Пүрэв", fri: "Баасан", sat: "Бямба", sun: "Ням",
@@ -116,7 +127,7 @@ export default async function StoreBranchPage({
       <h1 className="font-display text-3xl font-extrabold text-brand-ink">{name}</h1>
 
       <div className="mt-8 grid gap-8 md:grid-cols-2">
-        <div className="space-y-4 rounded-card border border-brand-gray-light bg-white p-6">
+        <Card className="space-y-4">
           <p className="flex items-start gap-3 text-brand-ink">
             <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-brand-red" aria-hidden />
             <span>
@@ -155,14 +166,22 @@ export default async function StoreBranchPage({
             target="_blank"
             rel="noopener noreferrer"
             data-analytics-event="click_directions"
-            className="mt-2 inline-block rounded-full bg-brand-red px-6 py-3 text-sm font-bold text-white hover:bg-brand-red-dark"
+            className={cn(buttonClassName("primary"), "mt-2 inline-flex")}
           >
             {t("directions")}
           </a>
-        </div>
+        </Card>
 
         <div className="overflow-hidden rounded-card border border-brand-gray-light">
-          {location.google_maps_embed_url ? (
+          {location.latitude && location.longitude ? (
+            <StoreMapLoader
+              storeLat={location.latitude}
+              storeLng={location.longitude}
+              storeName={name}
+              landmarks={location.landmarks}
+              locale={locale}
+            />
+          ) : location.google_maps_embed_url ? (
             <iframe
               title={`${name} — Google Maps`}
               src={location.google_maps_embed_url}
@@ -173,12 +192,35 @@ export default async function StoreBranchPage({
           ) : (
             <div className="flex h-full min-h-64 items-center justify-center bg-brand-cream p-6 text-center text-sm text-brand-gray">
               {locale === "en"
-                ? "Map embed not configured yet — add a Google Maps embed URL in Site Settings."
-                : "Газрын зураг тохируулагдаагүй байна — админ тохиргооноос Google Maps линк нэмнэ үү."}
+                ? "Map not configured yet — add coordinates in Site Settings."
+                : "Газрын зураг тохируулагдаагүй байна — админ тохиргооноос байршил нэмнэ үү."}
             </div>
           )}
         </div>
       </div>
+
+      {location.landmarks.length > 0 && (
+        <section className="mt-8">
+          <h2 className="font-display text-lg font-bold text-brand-ink">
+            {locale === "en" ? "Nearby landmarks" : "Ойролцоох ориентирууд"}
+          </h2>
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {location.landmarks.map((l, i) => {
+              const landmarkName = localized(l.name_mn, l.name_en, locale);
+              const category = LANDMARK_LABELS[l.category]
+                ? localized(LANDMARK_LABELS[l.category].mn, LANDMARK_LABELS[l.category].en, locale)
+                : l.category;
+              return (
+                <li key={i} className="flex items-center gap-2 text-sm text-brand-ink">
+                  <MapPin className="h-4 w-4 shrink-0 text-brand-gray" aria-hidden />
+                  <span className="font-medium">{landmarkName}</span>
+                  <span className="text-xs text-brand-gray">({category})</span>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       <section className="mt-12">
         <h2 className="font-display text-xl font-bold text-brand-ink">{t("faqTitle")}</h2>

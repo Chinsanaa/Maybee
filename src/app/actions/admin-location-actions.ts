@@ -86,3 +86,55 @@ export async function deleteLocationAction(formData: FormData) {
   revalidatePath("/admin/settings/locations");
   revalidatePath("/", "layout");
 }
+
+export async function addLandmarkAction(formData: FormData) {
+  const supabase = await createServerSupabaseClient();
+  const locationId = String(formData.get("location_id"));
+
+  const { data: location } = await supabase
+    .from("store_location")
+    .select("landmarks")
+    .eq("id", locationId)
+    .maybeSingle();
+  if (!location) return;
+
+  const landmarks = Array.isArray(location.landmarks) ? location.landmarks : [];
+  const landmark = {
+    name_mn: String(formData.get("name_mn") ?? "").trim(),
+    name_en: String(formData.get("name_en") ?? "").trim(),
+    category: String(formData.get("category") ?? "landmark"),
+    latitude: Number(formData.get("latitude")),
+    longitude: Number(formData.get("longitude")),
+  };
+  if (!landmark.name_mn || Number.isNaN(landmark.latitude) || Number.isNaN(landmark.longitude)) return;
+
+  await supabase
+    .from("store_location")
+    .update({ landmarks: [...landmarks, landmark] })
+    .eq("id", locationId);
+
+  revalidatePath("/admin/settings/locations");
+  revalidatePath("/", "layout");
+}
+
+export async function removeLandmarkAction(formData: FormData) {
+  const supabase = await createServerSupabaseClient();
+  const locationId = String(formData.get("location_id"));
+  const index = Number(formData.get("index"));
+
+  const { data: location } = await supabase
+    .from("store_location")
+    .select("landmarks")
+    .eq("id", locationId)
+    .maybeSingle();
+  if (!location) return;
+
+  const landmarks = Array.isArray(location.landmarks) ? location.landmarks : [];
+  await supabase
+    .from("store_location")
+    .update({ landmarks: landmarks.filter((_, i) => i !== index) })
+    .eq("id", locationId);
+
+  revalidatePath("/admin/settings/locations");
+  revalidatePath("/", "layout");
+}
