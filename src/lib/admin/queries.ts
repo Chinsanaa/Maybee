@@ -10,14 +10,13 @@ export async function getDashboardStats() {
     supabase
       .from("product")
       .select("id, name_mn, sku, stock_quantity, low_stock_threshold")
-      .filter("stock_quantity", "lte", 5)
       .order("stock_quantity", { ascending: true })
-      .limit(5),
+      .limit(100),
   ]);
 
   return {
     productCount: productCount ?? 0,
     publishedCount: publishedCount ?? 0,
-    lowStock: (lowStock ?? []).filter((p) => p.stock_quantity <= p.low_stock_threshold),
+    lowStock: (lowStock ?? []).filter((p) => p.stock_quantity <= p.low_stock_threshold).slice(0, 5),
   };
 }

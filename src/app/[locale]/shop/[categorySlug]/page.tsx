@@ -1,29 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale } from "next-intl/server";
-import { listProducts, getCategoryBySlug, type ProductFilters } from "@/lib/catalog";
+import { listProducts, getCategoryBySlug, parseShopSearchParams } from "@/lib/catalog";
 import { getBusinessInfo } from "@/lib/business-info";
 import { ProductCard } from "@/components/product/product-card";
 import { ShopFilters } from "@/components/shop/shop-filters";
 import { SortSelect } from "@/components/shop/sort-select";
 import { Pagination } from "@/components/shop/pagination";
 import { Breadcrumbs } from "@/components/shop/breadcrumbs";
-
-function localized(mn: string, en: string, locale: string) {
-  return locale === "en" && en ? en : mn;
-}
-
-function parseFilters(sp: Record<string, string | string[] | undefined>): Omit<ProductFilters, "categoryId"> {
-  const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : undefined);
-  return {
-    maxPrice: str(sp.maxPrice) ? Number(str(sp.maxPrice)) : undefined,
-    ageMonths: str(sp.age) ? Number(str(sp.age)) : undefined,
-    brand: str(sp.brand),
-    onSale: sp.onSale === "1",
-    sort: (str(sp.sort) as ProductFilters["sort"]) ?? "relevance",
-    page: str(sp.page) ? Number(str(sp.page)) : 1,
-  };
-}
+import { localized } from "@/lib/utils";
 
 export async function generateMetadata({
   params,
@@ -64,7 +49,7 @@ export default async function CategoryShopPage({
 
   if (!category) notFound();
 
-  const filters = { ...parseFilters(sp), categoryId: category.id };
+  const filters = { ...parseShopSearchParams(sp), categoryId: category.id };
   const { products, total, page, pageSize } = await listProducts(filters);
   const basePath = `/shop/${categorySlug}`;
 

@@ -87,9 +87,7 @@ export default async function ProductPage({
   const pct = discountPercent(product.price, product.compare_at_price);
   const ageLabel =
     product.age_min_months !== null
-      ? `${Math.floor(product.age_min_months / 12)}${product.age_min_months % 12 ? "+" : ""}+ ${
-          locale === "en" ? "yrs" : "нас"
-        }`
+      ? `${Math.floor(product.age_min_months / 12)}+ ${locale === "en" ? "yrs" : "нас"}`
       : null;
 
   const images = product.product_image

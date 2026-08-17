@@ -3,7 +3,7 @@ import { Link } from "@/i18n/navigation";
 import { getAllCategories, getDistinctBrands } from "@/lib/catalog";
 import { AGE_BANDS as AGE_BAND_DEFS, BUDGET_BANDS as BUDGET_BAND_DEFS } from "@/lib/collections";
 import { mergeQuery } from "@/lib/query";
-import { cn } from "@/lib/utils";
+import { cn, localized } from "@/lib/utils";
 
 const AGE_BANDS = AGE_BAND_DEFS.map((b) => ({
   labelMn: b.labelMn,
@@ -16,10 +16,6 @@ const PRICE_BANDS = BUDGET_BAND_DEFS.filter((b) => b.maxPrice !== null).map((b) 
   labelEn: b.labelEn,
   value: String(b.maxPrice),
 }));
-
-function localized(mn: string, en: string, locale: string) {
-  return locale === "en" && en ? en : mn;
-}
 
 export async function ShopFilters({
   basePath,

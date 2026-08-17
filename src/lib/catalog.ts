@@ -10,6 +10,13 @@ export type ProductWithImages = Tables<"product"> & {
 const PRODUCT_SELECT =
   "*, product_image(*), category:category_id(id, name_mn, name_en, slug_mn, slug_en)";
 
+/** Escapes a value for safe interpolation into a PostgREST `.or()` filter
+ * string — wraps it in double quotes so commas/parentheses in the value
+ * can't be parsed as filter-syntax delimiters. */
+function escapeOrValue(value: string): string {
+  return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+}
+
 export const getFeaturedCategories = cache(async (limit = 8) => {
   const supabase = createPublicClient();
   const { data } = await supabase
@@ -37,7 +44,7 @@ export const getCategoryBySlug = cache(async (slug: string) => {
   const { data } = await supabase
     .from("category")
     .select("*")
-    .or(`slug_mn.eq.${slug},slug_en.eq.${slug}`)
+    .or(`slug_mn.eq.${escapeOrValue(slug)},slug_en.eq.${escapeOrValue(slug)}`)
     .eq("is_active", true)
     .maybeSingle();
   return data;
@@ -57,6 +64,24 @@ export type ProductFilters = {
   page?: number;
   pageSize?: number;
 };
+
+/** Parses shop/category-page searchParams into ProductFilters. Shared so
+ * `/shop` and `/shop/[categorySlug]` stay in sync as filters are added. */
+export function parseShopSearchParams(
+  sp: Record<string, string | string[] | undefined>
+): ProductFilters {
+  const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : undefined);
+  return {
+    minPrice: str(sp.minPrice) ? Number(str(sp.minPrice)) : undefined,
+    maxPrice: str(sp.maxPrice) ? Number(str(sp.maxPrice)) : undefined,
+    ageMonths: str(sp.age) ? Number(str(sp.age)) : undefined,
+    brand: str(sp.brand),
+    onSale: sp.onSale === "1",
+    filter: str(sp.filter) as ProductFilters["filter"],
+    sort: (str(sp.sort) as ProductFilters["sort"]) ?? "relevance",
+    page: str(sp.page) ? Number(str(sp.page)) : 1,
+  };
+}
 
 export async function listProducts(filters: ProductFilters = {}) {
   const supabase = createPublicClient();
@@ -128,7 +153,7 @@ export const getProductBySlug = cache(async (slug: string) => {
   const { data } = await supabase
     .from("product")
     .select(PRODUCT_SELECT)
-    .or(`slug_mn.eq.${slug},slug_en.eq.${slug}`)
+    .or(`slug_mn.eq.${escapeOrValue(slug)},slug_en.eq.${escapeOrValue(slug)}`)
     .eq("is_published", true)
     .maybeSingle();
   return data as unknown as ProductWithImages | null;
@@ -161,7 +186,9 @@ export async function searchProducts(q: string, limit = 24) {
     .select(PRODUCT_SELECT)
     .eq("is_published", true)
     .or(
-      `name_mn.ilike.%${q}%,name_en.ilike.%${q}%,brand.ilike.%${q}%,sku.ilike.%${q}%`
+      ["name_mn", "name_en", "brand", "sku"]
+        .map((field) => `${field}.ilike.${escapeOrValue(`%${q}%`)}`)
+        .join(",")
     )
     .limit(limit);
   return (data ?? []) as unknown as ProductWithImages[];
@@ -173,7 +200,7 @@ export async function getProductsBySlugs(slugs: string[]): Promise<ProductWithIm
   const { data } = await supabase
     .from("product")
     .select(PRODUCT_SELECT)
-    .or(slugs.map((s) => `slug_mn.eq.${s},slug_en.eq.${s}`).join(","))
+    .or(slugs.map((s) => `slug_mn.eq.${escapeOrValue(s)},slug_en.eq.${escapeOrValue(s)}`).join(","))
     .eq("is_published", true);
   return (data ?? []) as unknown as ProductWithImages[];
 }
