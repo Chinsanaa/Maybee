@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
-import { listProducts, type ProductFilters } from "@/lib/catalog";
+import { listProducts, parseShopSearchParams } from "@/lib/catalog";
 import { getBusinessInfo } from "@/lib/business-info";
 import { ProductCard } from "@/components/product/product-card";
 import { ShopFilters } from "@/components/shop/shop-filters";
@@ -19,19 +19,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-function parseFilters(sp: Record<string, string | string[] | undefined>): ProductFilters {
-  const str = (v: string | string[] | undefined) => (typeof v === "string" ? v : undefined);
-  return {
-    maxPrice: str(sp.maxPrice) ? Number(str(sp.maxPrice)) : undefined,
-    ageMonths: str(sp.age) ? Number(str(sp.age)) : undefined,
-    brand: str(sp.brand),
-    onSale: sp.onSale === "1",
-    filter: str(sp.filter) as ProductFilters["filter"],
-    sort: (str(sp.sort) as ProductFilters["sort"]) ?? "relevance",
-    page: str(sp.page) ? Number(str(sp.page)) : 1,
-  };
-}
-
 export default async function ShopPage({
   searchParams,
 }: {
@@ -39,7 +26,7 @@ export default async function ShopPage({
 }) {
   const sp = await searchParams;
   const [locale, business] = await Promise.all([getLocale(), getBusinessInfo()]);
-  const filters = parseFilters(sp);
+  const filters = parseShopSearchParams(sp);
   const { products, total, page, pageSize } = await listProducts(filters);
 
   return (
